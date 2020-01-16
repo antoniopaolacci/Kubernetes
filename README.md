@@ -10,4 +10,10 @@ Gli elementi che compongono Kubernetes:
 - deployment: oggetto importante che scatena le seguenti operazioni sul cluster Kubernetes: creazione di oggetti di tipo *replicaset* che istanziano a loro volta i pod sulle varie macchine
 - persistent volume claim: il cluster Kubernetes crea il volume sul network filesystem del provider esterno e lo collega al pod
 
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/architettura-generale.jpg)
+
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/gli-elementi.png)
+
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/pod.jpg)
+
 
