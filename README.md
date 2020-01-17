@@ -1,9 +1,9 @@
 # Kubernetes
 Introduzione a Kubernetes
 
-Gli elementi che compongono Kubernetes:
-
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/architettura-generale.jpg)
+
+Gli elementi che compongono Kubernetes:
 
 - cluster: costituito da un master-node e worker-node
 - master-node: è la macchina che esegue le operazioni di controllo del nostro cluster
