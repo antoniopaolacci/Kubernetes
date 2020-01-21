@@ -90,10 +90,21 @@ kube                               1/1     Running   0          46m   app=art,au
 kube-deployment-8454999b96-m55rd   1/1     Running   0          26m   pod-template-hash=8454999b96,run=kube-deployment
 ```
 
-# Test
+# Possiamo escludere la visualizzazione di alcuni classi di pod sulla base dell'associazione con una etichetta o label
+Vogliamo identificare tutti i pod che non presentano associata un'etichetta denominata *autore*
+```
+kubectl get po -l "!autore"
+```
 
+## Le label oltre ad essere associate ai pod possono essere associate anche ai *nodi*, un esempio:
+```
+kubectl label node gke-node-01-est-europe-45ed787ef env=test 
+```
 
-
+## Visualizzare tutti i nodi etichettati con un determinato valore di etichetta:
+```
+kubectl get nodes -l env=test 
+```
 
 
 
