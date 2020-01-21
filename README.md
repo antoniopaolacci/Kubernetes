@@ -49,6 +49,27 @@ Visualizzare il log dell'applicazione, se in un pod sono presenti più contenito
 
 ```
 kubectl logs kube
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.3.RELEASE)
+
+2020-01-21 15:01:54.495  INFO 2 --- [main] com.xantrix.webapp.Application           : Starting Application v0.0.1 on kube with PID 2 (/kube-webservice-0.0.1.jar started by root in /)
+2020-01-21 15:01:54.502  INFO 2 --- [main] com.xantrix.webapp.Application           : The following profiles are active: dev
+2020-01-21 15:01:58.895  INFO 2 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 5051 (http)
+2020-01-21 15:01:58.962  INFO 2 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-01-21 15:01:58.962  INFO 2 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.16]
+2020-01-21 15:01:58.994  INFO 2 --- [main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib]
+2020-01-21 15:01:59.466  INFO 2 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-01-21 15:01:59.467  INFO 2 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4846 ms
+2020-01-21 15:02:00.436  INFO 2 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-01-21 15:02:01.501  INFO 2 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoint(s) beneath base path '/actuator'
+2020-01-21 15:02:01.707  INFO 2 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 5051 (http) with context path ''
+2020-01-21 15:02:01.730  INFO 2 --- [main] com.xantrix.webapp.Application           : Started Application in 8.774 seconds (JVM running for 10.016)
 ```
 
 ## View pod and labels
