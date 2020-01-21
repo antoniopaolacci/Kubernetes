@@ -116,6 +116,9 @@ kube-deployment-8454999b96-m55rd   1/1     Running   0          26m   pod-templa
 Vogliamo identificare tutti i pod che non presentano associata un'etichetta denominata *autore*
 ```
 kubectl get po -l "!autore"
+
+NAME                               READY   STATUS    RESTARTS   AGE
+kube-deployment-8454999b96-m55rd   1/1     Running   0          98m
 ```
 
 ## Le label oltre ad essere associate ai pod possono essere associate anche ai *nodi*, un esempio:
@@ -130,8 +133,30 @@ kubectl get nodes -l env=test
 E' utile etichettare anche i nodi perché attraverso questa è possibile associare i pod solo ad un determinato nodo. 
 Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modalità casuale in uno dei nodi a disposizione.
 
-E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo.
+E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo attraverso l'elemento *node-selector*
 
+```
+--------------------------------kubernetes/pod.yml file
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-v2
+  labels:
+    app: art
+    env: test
+
+spec:
+  nodeSelector:
+    env: "test"
+  containers:
+    - name: articoli-webservice
+      image:  antoniopaolacci/kube-webservice:0.0.1
+      ports:
+        - name: service
+          containerPort: 5051
+          protocol: TCP
+```
 
 
 
