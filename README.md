@@ -3,7 +3,7 @@ Introduzione a Kubernetes
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/architettura-generale.jpg)
 
-Gli elementi che compongono Kubernetes:
+# Gli elementi che compongono Kubernetes:
 
 - cluster: costituito da un master-node e worker-node
 - master-node: è la macchina che esegue le operazioni di controllo del nostro cluster
@@ -14,16 +14,79 @@ Gli elementi che compongono Kubernetes:
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/pod.jpg)
 
-La nomenclatura:
+# Nomenclatura:
  - Docker Engine (DE), il demone engine Docker running sulle macchine del cluster
  - Images, the artifacts need to be built, once running they are called *containers* on docker-host and *pods* in Kubernetes scenario
  - Command Line Interface (CLI), il client SDK, running on *clientside*, sull'host del developer e necessario per inviare in remoto comandi *kubectl* al cluster kubernetes
- - Docker Hub, the public registry where to upload our images provided by docker
- - Google Container Registry (GCR), Azure Container Registry (ACR), il registry rispettivamente fornito da Google e Microsoft
+ - Docker Hub, the public registry where to upload our images provided by docker (https://hub.docker.com/repository/docker/<docker-userId>)
+ - Google Container Registry (GCR), Azure Container Registry (ACR), i registry di immagini rispettivamente forniti da Google e Microsoft
 
-Installazione su Public Cloud Providers di *Kubernetes as a Service* 
+# Installazione su Public Cloud Providers di *Kubernetes as a Service* 
 
 ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-app.html
+
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.png)
+
+# You can use a free service to test with your github account: https://kubesail.com/
+
+# Create your first pod based on *yml* file
+kubectl create -f pod1.yml
+pod/kube created
+
+# View all pod
+kubectl get pod
+NAME   READY   STATUS    RESTARTS   AGE
+kube   1/1     Running   0          11m
+
+# View log to trace 
+Visualizzare il log dell'applicazione, se in un pod sono presenti più contenitori dovremmo specificare il nome del pod ed il nome del contenitore:
+'''
+kubectl logs kube
+'''
+# View pod and labels
+'''
+kubectl get pods --show-labels
+
+NAME                               READY   STATUS    RESTARTS   AGE   LABELS
+kube                               1/1     Running   0          31m   app=art,env=test
+kube-deployment-8454999b96-m55rd   1/1     Running   0          11m   pod-template-hash=8454999b96,run=kube-deployment
+'''
+
+Una volta che il nostro servizio o pod è stato testato con successo, è magari stato individuato per essere
+invocato in produzione. Possiamo variarne l'etichetta o tag con il comando seguente:
+
+# Change label of a pod
+'''
+kubectl label po kube env=prod --overwrite
+pod/kube labeled
+'''
+
+In ambiente di produzione abbiamo centinaia di container running o pod, per cui sarà molto utile filtrare
+per ottenere informazioni su un sottoinsieme di essi.
+
+# Filter pod based on tag
+'''
+kubectl get po -l env=prod
+NAME   READY   STATUS    RESTARTS   AGE
+kube   1/1     Running   0          35m
+'''
+
+# Possiamo aggiungere un etichetta o tag per classificare i nostri pods
+'''
+kubectl label po kube autore=antonio
+pod/kube labeled
+
+kubectl get pods --show-labels
+NAME                               READY   STATUS    RESTARTS   AGE   LABELS
+kube                               1/1     Running   0          46m   app=art,autore=antonio,env=prod
+kube-deployment-8454999b96-m55rd   1/1     Running   0          26m   pod-template-hash=8454999b96,run=kube-deployment
+'''
+
+# Test
+
+
+
+
 
 
 
