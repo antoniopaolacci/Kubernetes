@@ -28,6 +28,7 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.png)
 
 ## You can use a free service to test with your github account: https://kubesail.com/
+Paste *Lets get started* details  into ~/.kube/config to access your cluster from your developer host using kubectl cli
 
 ## Create your first pod based on *yml* file
 
@@ -126,6 +127,10 @@ kubectl label node gke-node-01-est-europe-45ed787ef env=test
 ```
 kubectl get nodes -l env=test 
 ```
+E' utile etichettare anche i nodi perché attraverso questa è possibile associare i pod solo ad un determinato nodo. 
+Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modalità casuale in uno dei nodi a disposizione.
+
+E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo.
 
 
 
