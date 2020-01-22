@@ -158,7 +158,22 @@ spec:
           protocol: TCP
 ```
 
+## Visualizzare tutti i namespace (raccoglitori in grado di catalogare e ragguppare tutti i pod afferenti allo stesso tipo)
 
+E' possibile creare anche nuovi namespace in grado di raggruppare i nostri pod.
+
+```
+kubectl get ns
+
+kubectl create -f namespace1.yml
+
+--------------------------------kubernetes/namespace.yml file
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-webservice-namespace
+
+```
 
 
 
