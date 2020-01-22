@@ -224,13 +224,13 @@ spec:
 
 Visualizziamo cosa è successo:
 ```
-kubectl get po
-NAME                               READY   STATUS    RESTARTS   AGE
-repcon-articoli-z9d8s              1/1     Running   0          5m42s
-repcon-articoli-z9aDs              1/1     Running   0          5m1s
-repcon-articoli-ef34s              1/1     Running   0          6m19s
+kubectl get po --show-labels
+NAME                               READY   STATUS    RESTARTS   AGE     LABELS
+repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=artsrv
+repcon-articoli-z9aDs              1/1     Running   0          5m1s    app=artsrv
+repcon-articoli-ef34s              1/1     Running   0          6m19s   app=artsrv
 ```
-Sono stati creati ed attivati i tre POD.
+Sono stati creati ed attivati i tre POD ed etichettati con il riferimento (label) app=artsrv.
 
 
 
