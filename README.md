@@ -176,7 +176,15 @@ metadata:
 ```
 
 
-
+### Eliminare un pod, eliminare tutti i pod eliminando il namespace
+```
+kubectl delete po kube
+pod "kube" deleted.
+```
+Soluzione drastica per eliminare tutti i pod, è eliminare il namespace con il comando:
+```
+kubectl delete ns my-kube-webservice-namespace
+```
 
 
 
