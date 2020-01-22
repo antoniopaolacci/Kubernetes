@@ -185,5 +185,15 @@ Soluzione drastica per eliminare tutti i pod, è eliminare il namespace con il c
 kubectl delete ns my-kube-webservice-namespace
 ```
 
+### Replication controller, il primo automatismo
+Una risorsa che garantisce il continuo funzionamento di un determinato tipo o numero di pod. Monitora lo stato di un pod nel proprio dominio di responsabilità identificata dalla label (etichetta) che abbiamo associato al nostro pod. Gestisce il numero di repliche che vogliamo vengano attivate e lo manterrà costante aumentando o cancellando in maniera automatica i pod *running*.
+
+- label selector, selezioniamo il dominio del replication controller
+- replica count, numero di istanze che vogliamo siano sempre attive
+- pod template
+
+
+
+
 
 
