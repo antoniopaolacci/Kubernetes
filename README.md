@@ -186,12 +186,51 @@ kubectl delete ns my-kube-webservice-namespace
 ```
 
 ### Replication controller, il primo automatismo
-Una risorsa che garantisce il continuo funzionamento di un determinato tipo o numero di pod. Monitora lo stato di un pod nel proprio dominio di responsabilità identificata dalla label (etichetta) che abbiamo associato al nostro pod. Gestisce il numero di repliche che vogliamo vengano attivate e lo manterrà costante aumentando o cancellando in maniera automatica i pod *running*.
+Una risorsa kubernetes che garantisce il continuo funzionamento di un determinato tipo o numero di pod. Monitora lo stato di un pod nel proprio dominio di responsabilità identificata dalla label (etichetta) che abbiamo associato al nostro pod. Gestisce il numero di repliche che vogliamo vengano attivate e lo manterrà costante aumentando o cancellando in maniera automatica i pod *running*.
 
 - label selector, selezioniamo il dominio del replication controller
 - replica count, numero di istanze che vogliamo siano sempre attive
 - pod template
 
+### Creare un replication controller
+
+
+```
+kubectl create -f replicationController1.yml
+replicationcontroller/repcon-articoli created
+
+--------------------------------kubernetes/replicationController1.yml file
+## Replication Controller
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: repcon-articoli                                ## Specifichiamo il dominio, RC sovraintenderà ai POD di tipo articolo
+spec:
+  replicas: 3                                          ## Il numero di pod attivi sarà sempre uguali a 3
+  selector:
+    app: artsrv                                        ## Specifichiamo che l'app POD istanziati avranno l'identificativo 'artsrv'
+  template:
+    metadata:
+      labels:
+        app: artsrv                                    ## Il metadata del nostro POD avrà come riferimento la label app = 'artsrv' 
+    spec:
+      containers:                                      ## Specifichiamo il container che dovrà essere attivato
+      - name: articoli-webservice
+        image: antoniopaolacci/kube-webservice:0.0.1   ## Specifichiamo i campi <docker-hub-id>/<image-name>:<tag>
+        ports:
+        - containerPort: 5051
+ ```
+
+Visualizziamo cosa è successo:
+```
+kubectl get po
+NAME                               READY   STATUS    RESTARTS   AGE
+repcon-articoli-z9d8s              1/1     Running   0          5m42s
+repcon-articoli-z9aDs              1/1     Running   0          5m1s
+repcon-articoli-ef34s              1/1     Running   0          6m19s
+```
+Sono stati creati ed attivati i tre POD.
 
 
 
