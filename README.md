@@ -22,13 +22,12 @@ Introduzione a Kubernetes
  - Google Container Registry (GCR), Azure Container Registry (ACR), i registry di immagini rispettivamente forniti da Google e Microsoft
 
 ## Installazione su Public Cloud Providers di *Kubernetes as a Service* 
-
 ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-app.html
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.png)
 
-## You can use a free service to test with your github account: https://kubesail.com/
-Paste *Lets get started* details  into ~/.kube/config to access your cluster from your developer host using kubectl cli
+## You can use a free service to test with your github account: 
+https://kubesail.com/ Paste *Lets get started* code details into ~/.kube/config on your developer machine to access your cluster using kubectl *cli* command
 
 ## Create your first pod based on *yml* file
 
