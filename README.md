@@ -28,6 +28,7 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 
 ## You can use a free service to test with your github account: 
 https://kubesail.com/ Paste *Lets get started* code details into ~/.kube/config on your developer machine to access your cluster using kubectl *cli* command
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubesail.jpg)
 
 ## Create your first pod based on *yml* file
 
