@@ -32,14 +32,14 @@ https://kubesail.com/ Paste *Lets get started* code details into ~/.kube/config 
 
 ### Create your first pod based on *yml* file
 
-```
+```bat
 kubectl create -f pod1.yml
 pod/kube created
 ```
 
 ### View all pods
 
-```
+```bat
 kubectl get pod
 NAME   READY   STATUS    RESTARTS   AGE
 kube   1/1     Running   0          11m
@@ -48,7 +48,7 @@ kube   1/1     Running   0          11m
 ### View log to trace 
 Visualizzare il log dell'applicazione, se in un pod sono presenti più contenitori dovremmo specificare il nome del pod ed il nome del contenitore:
 
-```
+```bat
 kubectl logs kube
 ```
 
@@ -76,7 +76,7 @@ kubectl logs kube
 ```
 
 ### View pod and labels
-```
+```bat
 kubectl get pods --show-labels
 
 NAME                               READY   STATUS    RESTARTS   AGE   LABELS
@@ -88,7 +88,7 @@ Una volta che il nostro servizio o pod è stato testato con successo, è magari 
 invocato in produzione. Possiamo variarne l'etichetta o tag con il comando seguente:
 
 ### Change label of a pod
-```
+```bat
 kubectl label po kube env=prod --overwrite
 pod/kube labeled
 ```
@@ -97,14 +97,14 @@ In ambiente di produzione abbiamo centinaia di container running o pod, per cui 
 per ottenere informazioni su un sottoinsieme di essi.
 
 ### Filter pod based on tag
-```
+```bat
 kubectl get po -l env=prod
 NAME   READY   STATUS    RESTARTS   AGE
 kube   1/1     Running   0          35m
 ```
 
 ### Possiamo aggiungere un etichetta o tag per classificare i nostri pods
-```
+```bat
 kubectl label po kube autore=antonio
 pod/kube labeled
 
@@ -116,7 +116,7 @@ kube-deployment-8454999b96-m55rd   1/1     Running   0          26m   pod-templa
 
 ### Possiamo escludere la visualizzazione di alcuni classi di pod sulla base dell'associazione con una etichetta o label
 Vogliamo identificare tutti i pod che non presentano associata un'etichetta denominata *autore*
-```
+```bat
 kubectl get po -l "!autore"
 
 NAME                               READY   STATUS    RESTARTS   AGE
@@ -129,7 +129,7 @@ kubectl label node gke-node-01-est-europe-45ed787ef env=test
 ```
 
 ### Visualizzare tutti i nodi etichettati con un determinato valore di etichetta:
-```
+```bat
 kubectl get nodes -l env=test 
 ```
 E' utile etichettare anche i nodi perché attraverso questa è possibile associare i pod solo ad un determinato nodo. 
@@ -137,7 +137,7 @@ Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modali
 
 E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo attraverso l'elemento *node-selector*
 
-```
+```yaml
 --------------------------------kubernetes/pod.yml file
 
 apiVersion: v1
@@ -164,7 +164,7 @@ spec:
 
 E' possibile creare anche nuovi namespace in grado di raggruppare i nostri pod.
 
-```
+```bat
 kubectl get ns
 
 kubectl create -f namespace1.yml
@@ -178,12 +178,12 @@ metadata:
 ```
 
 ### Eliminare un pod, eliminare tutti i pod eliminando il namespace
-```
+```bat
 kubectl delete po kube
 pod "kube" deleted.
 ```
 Soluzione drastica per eliminare tutti i pod, è eliminare il namespace con il comando:
-```
+```bat
 kubectl delete ns my-kube-webservice-namespace
 ```
 
@@ -197,10 +197,12 @@ Una risorsa kubernetes che garantisce il continuo funzionamento di un determinat
 ### Creare un replication controller
 
 
-```
+```bat
 kubectl create -f replicationController1.yml
 replicationcontroller/repcon-articoli created
+```
 
+```yaml
 --------------------------------kubernetes/replicationController1.yml file
 ## Replication Controller
 
@@ -225,7 +227,7 @@ spec:
  ```
 
 Visualizziamo cosa è successo:
-```
+```bat
 kubectl get po --show-labels
 NAME                               READY   STATUS    RESTARTS   AGE     LABELS
 repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=artsrv
@@ -234,12 +236,12 @@ repcon-articoli-ef34s              1/1     Running   0          6m19s   app=arts
 ```
 Sono stati creati ed attivati i tre POD ed etichettati con il riferimento (label) app=artsrv.
 Anche cambiando label con il seguente comando, il RC manterrà sempre attive almeno 3 repliche del POD.
-```
+```bat
 kubectl label pod repcon-articoli-z9d8s app=test --overwrite
 pod/repcon-articoli-z9d8s labeled
 ```
 
-```
+```bat
 kubectl get po --show-labels
 NAME                               READY   STATUS    RESTARTS   AGE     LABELS
 repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=test
@@ -250,7 +252,7 @@ repcon-articoli-ef34s              1/1     Running   0          6m19s   app=arts
 
 ### Visualizzare i dettagli di un replication controller
 
-```
+```bat
 kubectl describe rc repcon-articoli
 
 Name:         repcon-articoli
@@ -281,12 +283,11 @@ Events:            <none>
 
 Creare un replica set è simile alla creazione di ogni altro componente del kubernetes, via file *.yml* con il seguente comando:
 
-```
+```bat
 kubectl create -f replicaSet1.yml
-replicaset.apps/repset-articoli created
 ```
 
-```
+```yaml
 # ReplicaSet 
 apiVersion: apps/v1     # Differente tipologia, perché il replica set è gestito da differenti api del kubernetes
 kind: ReplicaSet
@@ -309,7 +310,7 @@ spec:                   # Numero delle specifiche
         - containerPort: 5051
 ```
 
-```yaml
+```bat
 kubectl get rs
 
 NAME                         DESIRED   CURRENT   READY   AGE
@@ -354,6 +355,6 @@ spec:
 ```
 
 ### Aumentare il numero delle repliche gestite da un replica set:
-```
+```bat
 kubectl scale rs repset-articoli --replicas=1
 ```
