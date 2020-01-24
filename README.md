@@ -138,7 +138,7 @@ Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modali
 E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo attraverso l'elemento *node-selector*
 
 ```yaml
---------------------------------kubernetes/pod.yml file
+--------------------------------> kubernetes/pod1.yml file
 
 apiVersion: v1
 kind: Pod
@@ -168,8 +168,10 @@ E' possibile creare anche nuovi namespace in grado di raggruppare i nostri pod.
 kubectl get ns
 
 kubectl create -f namespace1.yml
+```
 
---------------------------------kubernetes/namespace.yml file
+```yaml
+--------------------------------> kubernetes/namespace.yml file
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -203,7 +205,7 @@ replicationcontroller/repcon-articoli created
 ```
 
 ```yaml
---------------------------------kubernetes/replicationController1.yml file
+--------------------------------> kubernetes/replicationController1.yml file
 ## Replication Controller
 
 apiVersion: v1
@@ -321,6 +323,7 @@ repset-articoli              3         0         0       24s
 Un replica set permette di avere maggiore flessibilità rispetto al replication controller nella selezione di pod che verranno inclusi nel dominio di controllo del nostro replica set. 
 
 ```yaml
+--------------------------------> kubernetes/replicaSet2.yml file
 # ReplicaSet
 
 apiVersion: apps/v1
@@ -347,7 +350,7 @@ spec:
         ports:
         - containerPort: 5051
  
- ## Altri operatori  previsti:
+  # Altri operatori  previsti:
   # In = La label del pod deve avere uno dei volori inseriti in values
   # NotIn = La label del pod NON deve avere uno dei valori inseriti in values
   # Exists = Il key del pod deve avere il nome della key specificato (values non utilizzabile)
