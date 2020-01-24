@@ -27,7 +27,7 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.jpg)
 
 ### You can use a free service to test with your github account: 
-https://kubesail.com/ Paste *Lets get started* code details into ~/.kube/config on your developer machine to access your cluster using kubectl *cli* command
+https://kubesail.com/ Paste *Lets get started* page code details into *~/.kube/config* user file on your developer machine to access your remote cluster using kubectl *cli* command
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubesail.jpg)
 
 ### Create your first pod based on *yml* file
@@ -361,3 +361,32 @@ spec:
 ```bat
 kubectl scale rs repset-articoli --replicas=1
 ```
+### Services
+
+Un servizio permette di raggiungere i nostri POD (IP possono cambiare, i pod possono essere ridondanti e sotto gestione delle replice) e quindi i nostri contenitori per invocarne le funzionalità agendo come *gateway*.
+
+Funzione di un service è agire ad punto di collegamento tra il frontend, il nostro backend e magari una componente di backend che gestisce unicamente la persistenza (data grid).
+
+### Creare un nuovo service
+
+# Kubernetes Service
+
+```bat
+kubectl create -f service1.yml 
+```
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: artsrv
+spec:
+  #sessionAffinity: ClientIP
+  selector:
+    app: artsrv            ## Tutti i pod che hanno label etichetta app=artsrv rientreranno nel dominio del nostro service
+  ports:
+  - protocol: TCP
+    port: 5051             ## Porta di ascolto del gateway (service)
+    targetPort: 5051       ## Porta dove verrà contattaro il container (POD)
+```
+
