@@ -30,6 +30,12 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 https://kubesail.com/ Paste *Lets get started* page code details into *~/.kube/config* user file on your developer machine to access your remote cluster using kubectl *cli* command
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubesail.jpg)
 
+### View all nodes of the kubernetes cluster
+
+```bat
+kubectl get nodes
+```
+
 ### Create your first pod based on *yml* file
 
 ```bat
@@ -387,10 +393,10 @@ spec:
   ports:
   - protocol: TCP
     port: 5051             ## Porta di ascolto del gateway (service)
-    targetPort: 5051       ## Porta dove verrà contattaro il container (POD)
+    targetPort: 5051       ## Porta dove verrà contattato il container (POD)
 ```
 
-### Visualizzare tutti i servizi
+### Visualizzare tutti i services
 
 ```bat
 kubectl get services
@@ -398,4 +404,9 @@ kubectl get services
 NAME                   TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
 artsrv                 ClusterIP   10.2.54.187   <none>        5051/TCP   8s
 kube-deployment-5051   ClusterIP   10.2.47.251   <none>        5051/TCP   3d
+```
+
+### Eliminare tutti i POD
+```bat
+kubectl delete po --all
 ```
