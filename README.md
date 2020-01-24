@@ -245,5 +245,31 @@ repcon-articoli-z9aDs              1/1     Running   0          5m1s    app=arts
 repcon-articoli-ef34s              1/1     Running   0          6m19s   app=artsrv
 ```
 
+### Visualizzare i dettagli di un replication controller
 
+```
+kubectl describe rc repcon-articoli
 
+Name:         repcon-articoli
+Namespace:    antoniopaolacci
+Selector:     app=artsrv
+Labels:       app=artsrv
+Annotations:  <none>
+Replicas:     1 current / 3 desired
+Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=artsrv
+  Containers:
+   articoli-webservice:
+    Image:        antoniopaolacci/kube-webservice:0.0.1
+    Port:         5051/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+   Volumes:       <none>
+Conditions:
+  Type             Status  Reason
+  ----             ------  ------
+  ReplicaFailure   True    FailedCreate
+Events:            <none>
+```
