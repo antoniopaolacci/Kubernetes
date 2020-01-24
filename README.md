@@ -279,7 +279,7 @@ Events:            <none>
 
 ### Replica set, sopperire alle mancanze del replication controller
 
-Creare un replica set è simile alla creazione di ogni altro componente del kubernetes, via file *.yml*
+Creare un replica set è simile alla creazione di ogni altro componente del kubernetes, via file *.yml* con il seguente comando:
 
 ```
 kubectl create -f replicaSet1.yml
@@ -309,7 +309,7 @@ spec:                   # Numero delle specifiche
         - containerPort: 5051
 ```
 
-```
+```yaml
 kubectl get rs
 
 NAME                         DESIRED   CURRENT   READY   AGE
@@ -317,3 +317,38 @@ kube-deployment-8454999b96   1         1         1       2d23h
 repset-articoli              3         0         0       24s
 ```
 
+Un replica set permette di avere maggiore flessibilità rispetto al replication controller nella selezione di pod che verranno inclusi nel dominio di controllo del nostro replica set. 
+
+``'yaml
+# ReplicaSet
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: repset-articoli
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+            - artsrv
+            - barsrv
+  template:
+    metadata:
+      labels:
+        app: artsrv
+    spec:
+      containers:
+      - name: articoli-webservice
+        image: nlarocca/articoli-webservice-kube:0.0.1-SNAPSHOT
+        ports:
+        - containerPort: 5051
+
+#Altri operatori  previsti:
+  # In = La label del pod deve avere uno dei volori inseriti in values
+  # NotIn = La label del pod NON deve avere uno dei valori inseriti in values
+  # Exists = Il key del pod deve avere il nome della key specificato (values non utilizzabile)
+  # DoesNotExist = Il key del pod NON deve avere il nome della key specificato (values non utilizzabile)
+```
