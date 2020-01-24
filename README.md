@@ -242,7 +242,8 @@ pod/repcon-articoli-z9d8s labeled
 ```
 kubectl get po --show-labels
 NAME                               READY   STATUS    RESTARTS   AGE     LABELS
-repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=artsrv
+repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=test
+repcon-articoli-ab23s              1/1     Running   0          1m32s   app=artsrv
 repcon-articoli-z9aDs              1/1     Running   0          5m1s    app=artsrv
 repcon-articoli-ef34s              1/1     Running   0          6m19s   app=artsrv
 ```
@@ -275,3 +276,44 @@ Conditions:
   ReplicaFailure   True    FailedCreate
 Events:            <none>
 ```
+
+### Replica set, sopperire alle mancanze del replication controller
+
+Creare un replica set è simile alla creazione di ogni altro componente del kubernetes, via file *.yml*
+
+```
+kubectl create -f replicaSet1.yml
+replicaset.apps/repset-articoli created
+```
+
+```
+# ReplicaSet 
+apiVersion: apps/v1     # Differente tipologia, perché il replica set è gestito da differenti api del kubernetes
+kind: ReplicaSet
+metadata:
+  name: repset-articoli
+spec:                   # Numero delle specifiche
+  replicas: 3
+  selector:
+    matchLabels:
+        app: artsrv     # etichetta per selezione app=artsrv
+  template:
+    metadata:
+      labels:
+        app: artsrv     # creare i POD se essi non sono presenti e saranno generati con etichetta app=artsrv
+    spec:               # e caratteristiche seguenti (container, name, image, ...)
+      containers:
+      - name: articoli-webservice
+        image: antoniopaolacci/kube-webservice:0.0.1
+        ports:
+        - containerPort: 5051
+```
+
+```
+kubectl get rs
+
+NAME                         DESIRED   CURRENT   READY   AGE
+kube-deployment-8454999b96   1         1         1       2d23h
+repset-articoli              3         0         0       24s
+```
+
