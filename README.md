@@ -390,3 +390,12 @@ spec:
     targetPort: 5051       ## Porta dove verrà contattaro il container (POD)
 ```
 
+### Visualizzare tutti i servizi
+
+```bat
+kubectl get services
+
+NAME                   TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+artsrv                 ClusterIP   10.2.54.187   <none>        5051/TCP   8s
+kube-deployment-5051   ClusterIP   10.2.47.251   <none>        5051/TCP   3d
+```
