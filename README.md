@@ -345,8 +345,8 @@ spec:
         image: nlarocca/articoli-webservice-kube:0.0.1-SNAPSHOT
         ports:
         - containerPort: 5051
-
-#Altri operatori  previsti:
+ 
+ ## Altri operatori  previsti:
   # In = La label del pod deve avere uno dei volori inseriti in values
   # NotIn = La label del pod NON deve avere uno dei valori inseriti in values
   # Exists = Il key del pod deve avere il nome della key specificato (values non utilizzabile)
