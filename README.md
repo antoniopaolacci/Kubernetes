@@ -319,7 +319,7 @@ repset-articoli              3         0         0       24s
 
 Un replica set permette di avere maggiore flessibilità rispetto al replication controller nella selezione di pod che verranno inclusi nel dominio di controllo del nostro replica set. 
 
-``'yaml
+```yaml
 # ReplicaSet
 
 apiVersion: apps/v1
@@ -351,4 +351,9 @@ spec:
   # NotIn = La label del pod NON deve avere uno dei valori inseriti in values
   # Exists = Il key del pod deve avere il nome della key specificato (values non utilizzabile)
   # DoesNotExist = Il key del pod NON deve avere il nome della key specificato (values non utilizzabile)
+```
+
+### Aumentare il numero delle repliche gestite da un replica set:
+```
+kubectl scale rs repset-articoli --replicas=1
 ```
