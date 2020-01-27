@@ -712,3 +712,15 @@ spec:
 ### StorageClass
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/storage-class.jpg)
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: veloce                       ## Abbiamo chiamato questa StorageClass con un etichetta parlante
+provisioner: kubernetes.io/gce-pd    ## Dipende dal Kubernetes Cluster Provider, Google Cloud Platform Kubernetes Engine
+parameters:
+  type: pd-ssd                       ## Dipende dal Kubernetes Cluster Provider, dischi SSD alte performance
+  zone: europe-west4-a               ## Dipende dal Kubernetes Cluster Provider, Zona Europa del Google Cloud Platform
+```
+  
