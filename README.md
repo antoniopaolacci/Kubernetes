@@ -750,7 +750,30 @@ spec:
 
 ## Le variabili d'ambiente nei POD
 
-Vogliamo passare al file di configurazione di Spring Boot (application.yml) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
+Vogliamo passare al file di configurazione di Spring Boot (+application.yml*) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
+
+```yaml
+spring:
+  profiles: 
+    active: dev
+  application:
+    name: kube-webapp 
+ 
+server:
+  port: 8080
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,httptrace,metrics,refresh,bus-refresh,hystrix.stream
+
+# ==============================================================
+# = My config
+# ==============================================================  
+service:
+  host: ${MyServiceHost}
+```
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/variabili-ambiente.jpg)
 
@@ -785,4 +808,15 @@ spec:
           containerPort: 5051
           protocol: TCP
 ```
+
+### Config Map
+
+In quale modo è possibile configurare un **Config Map** per passare le configurazioni necessarie al nostro file Spring Boot *application.yml*, file di avvio della nostra applicazione o servizio.
+
+Kubernetes ci permette di creare Config Map che gestiranno valori e configurazioni di un determinato tipo, ad esempio il Config Map delle chiavi ed endpoint necessari per invocare i servizi esterni.
+
+Oppure il Config Map che gestisce le configurazioni per le connessioni ai DB.
+
+
+
 
