@@ -574,7 +574,7 @@ spec:
 kubectl create -f ingress.yml
 ```yaml
 
-```yamlyaml
+```yaml
 # Ingress 
 
 apiVersion: extensions/v1beta1
@@ -612,3 +612,56 @@ Abbiamo creato una Ingress che ci permette di contattare il nostro cluster su du
  - www.soundapp.test.com:80/ 
 dove al primo risponderà un'applicazione Node Js ed al secondo un'applicazione Java Spring Boot. 
 La Ingress ci permette la massima flessibilità.
+
+## La persistenza dei dati
+
+Su Google Cloud Engine abbiamo prima la necessità di creare ad nuovo disco virtuale:
+*sudo gcloud compute disks create --size=1GiB --zone=europe-west4-a mysqldb*
+
+### Creare un persistence volume
+
+```yaml
+-----------------------------> persistentVolume1.yml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  #hostPath:
+  #  path: "/mnt/data"
+  gcePersistentDisk:
+    pdName: mysqldb
+    fsType: ext4
+  ```    
+
+### Visualizzare tutti i volumi sul kluster
+
+```bat
+kubectl get pv
+``` 
+
+Il nostro volume è a disposizione. Il suo spazio non è stato ancora reclamato da nessuno. Creiamo un *persistence volume claim*:
+
+```yaml
+-----------------------------> persistentVolumeClaim1.yml.yml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ""
+  
+```
+
