@@ -708,3 +708,7 @@ spec:
     persistentVolumeClaim:
       claimName: mysql-pvc
 ```
+
+### StorageClass
+
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/storage-class.jpg)
