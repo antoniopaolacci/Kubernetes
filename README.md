@@ -672,7 +672,8 @@ Stiamo acquisendo così 1GB di spazio e stiamo dicendo con il parametro *ReadWri
 kubectl get pvc
 ``` 
 
-### Creare il POD che ospita il DBMS MySql ed utilizzerà il persistence volume per memorizzare i DB files
+### Creare il POD che ospita il DBMS MySql 
+...utilizzerà il persistence volume per memorizzare i data files del db
 
 ```yaml
 apiVersion: v1
@@ -724,3 +725,28 @@ parameters:
   zone: europe-west4-a               ## Dipende dal Kubernetes Cluster Provider, Zona Europa del Google Cloud Platform
 ```
   
+### Visualizzare tutte le storage class 
+
+```bat
+kubectl get sc
+```
+Esiste una storage class di base (standard) o default utilizzata quando non specifichiamo nulla e lasciamo stringa vuota nella costruzione di un  PersistentVolumeClaim
+
+### Modificare il POD del Mysql affinché utilizzi dischi SSD migliorando le prestazioni del DB
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql2-pvc
+spec:
+  storageClassName: veloce   
+  resources:
+    requests:
+      storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+```
+
+## Le variabili d'ambiente nei POD
+
