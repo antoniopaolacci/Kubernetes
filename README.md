@@ -367,15 +367,12 @@ spec:
 ```bat
 kubectl scale rs repset-articoli --replicas=1
 ```
-### Services
 
-Un servizio permette di raggiungere i nostri POD (IP possono cambiare, i pod possono essere ridondanti e sotto gestione delle replice) e quindi i nostri contenitori per invocarne le funzionalità agendo come *gateway*.
+### Creare un nuovo Kubernetes Service
 
-Funzione di un service è agire ad punto di collegamento tra il frontend, il nostro backend e magari una componente di backend che gestisce unicamente la persistenza (data grid).
+Un servizio permette di raggiungere i nostri POD (ricordiamoci che gli IP possono cambiare, i pod possono essere ridondanti e sotto gestione delle repliche) e quindi i nostri contenitori (containers) per invocarne le funzionalità agendo come *gateway*:
 
-### Creare un nuovo service
-
-# Kubernetes Service
+Un service ha la funzione di agire come punto di collegamento tra il frontend ed il nostro backend oppure una qualsiasi componente che gestisce unicamente la persistenza dati.
 
 ```bat
 kubectl create -f service1.yml 
@@ -392,8 +389,8 @@ spec:
     app: artsrv            ## Tutti i pod che hanno label etichetta app=artsrv rientreranno nel dominio del nostro service
   ports:
   - protocol: TCP
-    port: 5051             ## Porta di ascolto del gateway (service)
-    targetPort: 5051       ## Porta dove verrà contattato il container (POD)
+    port: 5051             ## Porta di ascolto del gateway (il service)
+    targetPort: 5051       ## Porta dove verrà contattato il POD (containers)
 ```
 
 ### Visualizzare tutti i services
@@ -410,3 +407,28 @@ kube-deployment-5051   ClusterIP   10.2.47.251   <none>        5051/TCP   3d
 ```bat
 kubectl delete po --all
 ```
+
+### Visualizzare tutte le variabili d'ambiente di un nodo
+
+```bat
+kubectl exec repset-articoli-tjxq2 env
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=repset-articoli-tjxq2
+LANG=C.UTF-8
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+JAVA_VERSION=8u111
+JAVA_DEBIAN_VERSION=8u111-b14-2~bpo8+1
+CA_CERTIFICATES_JAVA_VERSION=20140324
+KUBERNETES_PORT_443_TCP=tcp://10.2.0.1:443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_ADDR=10.2.0.1
+KUBERNETES_SERVICE_HOST=10.2.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT=tcp://10.2.0.1:443
+HOME=/root
+```
+### Kube DNS
+Come funziona il DNS all'interno del kubernetes ? Vediamo che kubernetes ha startato un nuovo servizio kube-dns 
