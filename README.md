@@ -564,9 +564,11 @@ spec:
     targetPort: 8080      # La nostra applicazione è in ascolto sulla porta 8080
   selector:
     app: webapp
+    
+    
 ```
 
-### creare una Ingress
+### Creare una Ingress:
 
 ```bat
 kubectl create -f ingress.yml
@@ -581,7 +583,7 @@ metadata:
   name: alphashop
 spec:
   rules:
-  - host: soundapp.it
+  - host: soundapp.test.com
     http:
       paths:
       - path: /webapp/*
@@ -595,7 +597,7 @@ spec:
        
 ```
 
-Visualizziamo le Ingress:
+Visualizziamo ora le Ingress configurate sul kluster:
 
 ```bat
 kubectl get ingresses
@@ -604,3 +606,9 @@ NAME                        HOSTS         ADDRESS       PORTS     AGE
 alphashop                   soundapp.it   10.2.29.222   80, 443   101s
 cm-acme-http-solver-sgjqp   soundapp.it   10.2.29.222   80, 443   88s
 ```
+
+Abbiamo creato una Ingress che ci permette di contattare il nostro cluster su due path:
+ - www.soundapp.test.com:80/webapp/ 
+ - www.soundapp.test.com:80/ 
+dove al primo risponderà un'applicazione Node Js ed al secondo un'applicazione Java Spring Boot. 
+La Ingress ci permette la massima flessibilità.
