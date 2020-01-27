@@ -431,4 +431,37 @@ KUBERNETES_PORT=tcp://10.2.0.1:443
 HOME=/root
 ```
 ### Kube DNS
-Come funziona il DNS all'interno del kubernetes ? Vediamo che kubernetes ha startato un nuovo servizio kube-dns 
+Come funziona il DNS all'interno del kubernetes ? Vediamolo con un esempio: 
+
+### Entriamo all'interno di un nostro contenitore POD
+
+```bat
+kubectl exec -it repset-articoli-tjxq2 bash
+
+root@repset-articoli-tjxq2:/# curl -i -H "Accept: application/json" "http://10.2.46.183:5051/"
+HTTP/1.1 200
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Mon, 27 Jan 2020 10:38:45 GMT
+
+[
+   {
+      "codArt":"014600301",
+      "descrizione":"BARILLA FARINA 1 KG",
+      "um":"PZ",
+      "codStat":null,
+      "pzCart":24,
+      "pesoNetto":1.0,
+      "idStatoArt":null,
+      "dataCreaz":null,
+      "prezzo":1.09
+   
+},
+   {  ...
+```
+
+L'url che abbiamo costruito: *http://10.2.46.183:5051/* ci permetterà di invocare indiscriminatamente uno dei vari containers che ha startato kubernetes. Stiamo utilizzando direttamente l'indirizzo IP tra il POD che contiene il node e il nostro container. Possiamo utilizzare le variabili d'ambiente che abbiamo letto in precedenza oppure direttamente il nome del nostro services *artsrv*:
+
+```
+curl -i -H "Accept: application/json" "http://artsrv.default.svc.cluster.local:5051/" 
+```
