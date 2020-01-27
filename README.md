@@ -697,14 +697,14 @@ spec:
         cpu: "500m"
     volumeMounts:
     - name: mysql-data
-      mountPath: /var/lib/mysql                ## la cartella "var/lib/mysql" contiene i dati memorizzati su DB Mysql
-                                               ## i dati non saranno cancellati se il container sarà stoppato, restartato
-                                               ## cancellato
+      mountPath: /var/lib/mysql         ## la cartella "var/lib/mysql" contiene i dati memorizzati su DB Mysql
+                                        ## i dati non saranno cancellati se il container sarà stoppato, restartato
+                                        ## eliminato e ricreato
     ports:
     - containerPort: 3306
       protocol: TCP
   volumes:
   - name: mysql-data                           
     persistentVolumeClaim:
-      claimName: **mysql-pvc**
+      claimName: mysql-pvc
 ```
