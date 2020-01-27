@@ -485,3 +485,55 @@ Session Affinity:  None
 Events:            <none>
 ```
 
+## Un pod può contattare un servizio esterno per usufruire di una sua funzionalità (esempio weather-service):
+
+Creiamo il nostro servizio senza selettore ed associamogli le configurazioni endpoint:
+
+```bat
+kubectl create -f service3.yml
+service/weather-service created
+```
+
+```bat
+kubectl create -f endpoints1.yml
+```
+
+```
+curl -i -H "Accept: application/json" "http://weather-service:8080/data/2.5/weather?q=sassari,it&unit=metro" 
+```
+
+L'alternativa è utilizzare il seguente file .yml di configurazione per un service:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name:  weather-service
+spec:
+  type: ExternalName
+  externalName: api.openweathermap.org             # non utilizzeranno gli IP ma direttamente un indirizzo mnemonico
+  ports:
+  - port: 8080
+```
+
+### Invocare un nostro pod da un client esterno.
+Anche in questo caso verrà configurato un service: 
+
+```yaml
+---------------------------------------> service5.yml
+
+# LoadBalancer type Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: artsrv-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5051 
+    targetPort: 5051 
+  selector:
+    app: artsrv
+
+```
