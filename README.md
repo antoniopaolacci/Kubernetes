@@ -632,15 +632,14 @@ spec:
   accessModes:
   - ReadWriteOnce
   - ReadOnlyMany
-  persistentVolumeReclaimPolicy: Retain
-  #hostPath:
-  #  path: "/mnt/data"
+  persistentVolumeReclaimPolicy: Retain   ## Anche se un POD sgancia la sua richiesta (claim) 
+                                          ## di spazio disco, i dati non  verranno cancellati
   gcePersistentDisk:
     pdName: mysqldb
     fsType: ext4
   ```    
 
-### Visualizzare tutti i volumi sul kluster
+### Visualizzare tutti i volumi:
 
 ```bat
 kubectl get pv
@@ -649,7 +648,7 @@ kubectl get pv
 Il nostro volume è a disposizione. Il suo spazio non è stato ancora reclamato da nessuno. Creiamo un *persistence volume claim*:
 
 ```yaml
------------------------------> persistentVolumeClaim1.yml.yml
+-----------------------------> persistentVolumeClaim1.yml
 
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -658,10 +657,54 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
   accessModes:
   - ReadWriteOnce
   storageClassName: ""
   
 ```
 
+Stiamo acquisendo così 1GB di spazio e stiamo dicendo con il parametro *ReadWriteOnce* che un solo POD alla volta può accedere al volume in lettura e scrittura. 
+
+### Visualizzare tutti i persistence volume claim:
+
+```bat
+kubectl get pvc
+``` 
+
+### Creare il POD che ospita il DBMS MySql ed utilizzerà il persistence volume per memorizzare i DB files
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysqldb
+spec:
+  containers:
+  - image: mysql:5.7.24
+    name: mysql
+    args:
+      - "--ignore-db-dir=lost+found"
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "123Stella"
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "250m"
+      limits:
+        memory: "2Gi"
+        cpu: "500m"
+    volumeMounts:
+    - name: mysql-data
+      mountPath: /var/lib/mysql                ## la cartella "var/lib/mysql" contiene i dati memorizzati su DB Mysql
+                                               ## i dati non saranno cancellati se il container sarà stoppato, restartato
+                                               ## cancellato
+    ports:
+    - containerPort: 3306
+      protocol: TCP
+  volumes:
+  - name: mysql-data                           
+    persistentVolumeClaim:
+      claimName: **mysql-pvc**
+```
