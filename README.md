@@ -750,8 +750,9 @@ spec:
 
 ## Le variabili d'ambiente nei POD
 
-Vogliamo passare al file di configurazione di Spring Boot (application.yml) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* 
+Vogliamo passare al file di configurazione di Spring Boot (application.yml) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
 
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/variabili-ambiente.jpg)
 
 ```yaml
 # Pod  
@@ -784,3 +785,4 @@ spec:
           containerPort: 5051
           protocol: TCP
 ```
+
