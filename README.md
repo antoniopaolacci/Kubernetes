@@ -543,13 +543,64 @@ spec:
 
 Configurare un service permette ad un client esterno di invocare i nostri servizi (POD) interni. 
 
-Ma kubernetes mette a disposizione un altro importante componente gli ingress, la soluzione per esporre la nostra webapp ed i suoi servizi offerti:
+Ma kubernetes mette a disposizione un altro importante componente gli *ingress*, la soluzione per esporre la nostra webapp ed i suoi servizi offerti. 
+
+Creiamo un nuovo tipo di service da utilizzare per una webapp ed esporre un webservice: *NodePort*.
+
+### Creare un nuovo tipo di service NodePort
 
 ```yaml
-a
+--------------------------------> nodePort1.yml
+# NodePort 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-nodeport
+spec:
+  type: NodePort          # NodePort specifica la tipologia di Service
+  ports:
+  - port: 80              # Esponiamo al client esterno la porta 80 per invocarci
+    targetPort: 8080      # La nostra applicazione è in ascolto sulla porta 8080
+  selector:
+    app: webapp
 ```
 
+### creare una Ingress
 
 ```bat
-b
+kubectl create -f ingress.yml
+```yaml
+
+```yamlyaml
+# Ingress 
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: alphashop
+spec:
+  rules:
+  - host: soundapp.it
+    http:
+      paths:
+      - path: /webapp/*
+        backend:
+          serviceName: nodesrv-nodeport
+          servicePort: 80
+      - path: /*
+        backend:
+          serviceName: webapp-nodeport
+          servicePort: 80
+       
+```
+
+Visualizziamo le Ingress:
+
+```bat
+kubectl get ingresses
+
+NAME                        HOSTS         ADDRESS       PORTS     AGE
+alphashop                   soundapp.it   10.2.29.222   80, 443   101s
+cm-acme-http-solver-sgjqp   soundapp.it   10.2.29.222   80, 443   88s
 ```
