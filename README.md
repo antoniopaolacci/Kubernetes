@@ -393,7 +393,7 @@ spec:
     targetPort: 5051       ## Porta dove verrà contattato il POD (containers)
 ```
 
-### Visualizzare tutti i services
+### Visualizzare tutti i services nel nostro cluster kubernetes:
 
 ```bat
 kubectl get services
@@ -485,7 +485,7 @@ Session Affinity:  None
 Events:            <none>
 ```
 
-## Un pod può contattare un servizio esterno per usufruire di una sua funzionalità (esempio weather-service):
+## Un pod può contattare un servizio esterno per usufruire di una sua funzionalità (esempio di un weather-service):
 
 Creiamo il nostro servizio senza selettore ed associamogli le configurazioni endpoint:
 
@@ -494,15 +494,17 @@ kubectl create -f service3.yml
 service/weather-service created
 ```
 
+e successivamente associamo gli endpoints come IP:
+
 ```bat
 kubectl create -f endpoints1.yml
 ```
 
-```
+```bat
 curl -i -H "Accept: application/json" "http://weather-service:8080/data/2.5/weather?q=sassari,it&unit=metro" 
 ```
 
-L'alternativa è utilizzare il seguente file .yml di configurazione per un service:
+In alternativa è possibile utilizzare anche il seguente file .yml di un service (*ExternalName*) con associazione di un indirizzo mnemonico:
 
 ```yaml
 apiVersion: v1
@@ -511,16 +513,16 @@ metadata:
   name:  weather-service
 spec:
   type: ExternalName
-  externalName: api.openweathermap.org             # non utilizzeranno gli IP ma direttamente un indirizzo mnemonico
+  externalName: api.openweathermap.org             # Non utilizzeranno gli IP ma direttamente un indirizzo mnemonico
   ports:
   - port: 8080
 ```
 
 ### Invocare un nostro pod da un client esterno.
-Anche in questo caso verrà configurato un service: 
+Anche in questo caso verrà configurato un service, un service di tipo *LoadBalancer*.
 
 ```yaml
----------------------------------------> service5.yml
+--------------------------------> service5.yml
 
 # LoadBalancer type Service
 
@@ -535,5 +537,19 @@ spec:
     targetPort: 5051 
   selector:
     app: artsrv
+```
 
+### Introduzione agli ingress
+
+Configurare un service permette ad un client esterno di invocare i nostri servizi (POD) interni. 
+
+Ma kubernetes mette a disposizione un altro importante componente gli ingress, la soluzione per esporre la nostra webapp ed i suoi servizi offerti:
+
+```yaml
+a
+```
+
+
+```bat
+b
 ```
