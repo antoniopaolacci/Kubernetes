@@ -750,3 +750,37 @@ spec:
 
 ## Le variabili d'ambiente nei POD
 
+Vogliamo passare al file di configurazione di Spring Boot (application.yml) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* 
+
+
+```yaml
+# Pod  
+
+apiVersion: v1
+
+kind: Pod
+metadata:
+  name: articoli
+  labels:
+    app: art
+    env: test
+
+spec:
+  containers:
+    - name: kube-webservice
+      image: antoniopaolacci/kube-web-service
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      env:
+        - name: MyServiceHost
+          value: "10.7.243.223"
+      ports:
+        - name: service
+          containerPort: 5051
+          protocol: TCP
+```
