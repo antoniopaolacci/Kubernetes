@@ -465,3 +465,23 @@ L'url che abbiamo costruito: *http://10.2.46.183:5051/* ci permetterà di invoca
 ```
 curl -i -H "Accept: application/json" "http://artsrv.default.svc.cluster.local:5051/" 
 ```
+
+Possiamo visualizzare tutte le informazioni sul service:
+
+```bat
+kubectl describe svc artsrv
+
+Name:              artsrv
+Namespace:         antoniopaolacci
+Labels:            <none>
+Annotations:       <none>
+Selector:          app=artsrv
+Type:              ClusterIP
+IP:                10.2.46.183
+Port:              <unset>  5051/TCP
+TargetPort:        5051/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+```
+
