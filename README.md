@@ -513,7 +513,7 @@ kubectl create -f endpoints1.yml
 curl -i -H "Accept: application/json" "http://weather-service:8080/data/2.5/weather?q=sassari,it&unit=metro" 
 ```
 
-In alternativa è possibile utilizzare anche il seguente file .yml di un service (*ExternalName*) con associazione di un indirizzo mnemonico:
+In alternativa è possibile utilizzare anche il seguente file .yml di un service (*ExternalName*) con associazione di un indirizzo logico:
 
 ```yaml
 apiVersion: v1
