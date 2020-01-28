@@ -5,6 +5,7 @@ Introduzione a Kubernetes
 
 ### Gli elementi che compongono Kubernetes:
 
+- docker, istanza virtuale isolata alla quale è possibile assegnare risorse RAM,CPU,disco permettendo elasticità e reversibilità, evitando sovrapposizione permettendo la creazione di ambienti di sviluppo, test e produzione
 - cluster: costituito da un master-node e worker-node
 - master-node: è la macchina che esegue le operazioni di controllo del nostro cluster
 - worker-node: sono le macchine che eseguono i pod, l'astrazione di unità minima gestita dal Kubernetes
