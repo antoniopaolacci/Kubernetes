@@ -849,6 +849,90 @@ Vediamo in quale modo è possibile configurare un **Config Map** per passare le 
 
 Kubernetes ci permette attraverso i Config Map di creare specifici file che gestiranno valori e configurazioni di un determinato tipo, ad esempio il Config Map delle chiavi e degli endpoint necessari per invocare i servizi esterni oppure il Config Map che gestisce le configurazioni necessarie alla connessione verso i DB.
 
+```bat
+kubectl apply -f configMap.yml
+configmap/my-config created
+
+```
+
+```yaml
+--------------------------------> kubernetes/configMap.yml file
+
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: my-config 
+data:
+  # Configuration values can be set as key-value properties
+  data_one: mongodb
+  data_two: mariadb
+  data_three: oracle
+  data_four: cloudera
+  
+  # Or set as complete file contents (even JSON!)
+  keys: | 
+    image.public.key=771 
+    rsa.public.key=42
+```
+
+Utilizzo nel pod:
+
+```yaml
+--------------------------------> kubernetes/pod3-useConfigMap.yml
+# Pod  
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-webapp-pod-v2
+  labels:
+    app: art
+    env: test
+
+spec:
+  containers:
+    - name: kube-webapp
+      image: antoniopaolacci/kube-webapp:0.0.1
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      env:
+        - name: MySqlHost
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: MySqlHost
+        - name: used
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_one
+        - name: cheaper
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_two
+        - name: powerful
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_three
+        - name: popular
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_four        
+      ports:
+        - name: service
+          containerPort: 8080
+          protocol: TCP
+```
+
+
 
 
 
