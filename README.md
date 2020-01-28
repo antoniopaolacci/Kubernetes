@@ -840,14 +840,14 @@ spec:
 ### Config Map
 Svincolare i pod dai dettagli di configurazione. Kubernetes permette di utilizzare una *Config Map*:
 
-- parametrizziamo il nostro *application.yml* di una generica Spring Boot application introducendo le variabili d'ambiente con l'uso di ${...}
-- creaimo il file ConfigMap *yml* per kubernetes 
+- parametrizziamo il nostro *application.yml* di una generica Spring Boot application introducendo le variabili d'ambiente con l'uso di *${...}*
+- creaimo il file ConfigMap *yml* per kubernetes
+- associamolo alla definizione del nostro pod
+- otteniamo ed utilizziamo i valori nel codice Java
 
-In quale modo è possibile configurare un **Config Map** per passare le configurazioni necessarie al nostro file Spring Boot *application.yml*, file di avvio della nostra applicazione o servizio.
+Vediamo in quale modo è possibile configurare un **Config Map** per passare le configurazioni necessarie al nostro file Spring Boot *application.yml*, file di avvio della nostra applicazione o servizio.
 
-Kubernetes ci permette di creare Config Map che gestiranno valori e configurazioni di un determinato tipo, ad esempio il Config Map delle chiavi ed endpoint necessari per invocare i servizi esterni.
-
-Oppure il Config Map che gestisce le configurazioni per le connessioni ai DB.
+Kubernetes ci permette attraverso i Config Map di creare specifici file che gestiranno valori e configurazioni di un determinato tipo, ad esempio il Config Map delle chiavi e degli endpoint necessari per invocare i servizi esterni oppure il Config Map che gestisce le configurazioni necessarie alla connessione verso i DB.
 
 
 
