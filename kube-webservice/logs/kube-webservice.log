@@ -1,0 +1,16 @@
+23-01-2020 10:46:58.635[ INFO][kube-webservice][c.k.e.webapp.test.ApplicationTest::50::logStarting] -- Starting ApplicationTest on SYT21092 with PID 11500 (started by a.paolacci in D:\MyJavaProgetti\my-microservice-architecture\Kubernetes\kube-webservice)
+23-01-2020 10:46:58.637[ INFO][kube-webservice][c.k.e.webapp.test.ApplicationTest::679::logStartupProfileInfo] -- The following profiles are active: dev
+23-01-2020 10:47:01.030[ INFO][kube-webservice][o.s.b.a.e.web.EndpointLinksResolver::59::<init>] -- Exposing 4 endpoint(s) beneath base path '/actuator'
+23-01-2020 10:47:01.202[ INFO][kube-webservice][s.d.s.w.PropertySourcedRequestMappingHandlerMapping::69::initHandlerMethods] -- Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+23-01-2020 10:47:01.638[ INFO][kube-webservice][o.s.s.c.ThreadPoolTaskExecutor::171::initialize] -- Initializing ExecutorService 'applicationTaskExecutor'
+23-01-2020 10:47:02.015[ INFO][kube-webservice][s.d.s.w.p.DocumentationPluginsBootstrapper::160::start] -- Context refreshed
+23-01-2020 10:47:02.044[ INFO][kube-webservice][s.d.s.w.p.DocumentationPluginsBootstrapper::163::start] -- Found 1 custom documentation plugin(s)
+23-01-2020 10:47:02.076[ INFO][kube-webservice][s.d.s.w.s.ApiListingReferenceScanner::41::scan] -- Scanning for api listing references
+23-01-2020 10:47:02.227[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_1
+23-01-2020 10:47:02.231[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_2
+23-01-2020 10:47:02.235[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_3
+23-01-2020 10:47:02.237[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_4
+23-01-2020 10:47:02.240[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_5
+23-01-2020 10:47:02.243[ INFO][kube-webservice][s.d.s.w.r.o.CachingOperationNameGenerator::40::startingWith] -- Generating unique operation named: handleUsingGET_6
+23-01-2020 10:47:02.282[ INFO][kube-webservice][c.k.e.webapp.test.ApplicationTest::59::logStarted] -- Started ApplicationTest in 4.086 seconds (JVM running for 5.238)
+23-01-2020 10:47:02.502[ INFO][kube-webservice][o.s.s.c.ThreadPoolTaskExecutor::208::shutdown] -- Shutting down ExecutorService 'applicationTaskExecutor'
