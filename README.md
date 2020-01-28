@@ -26,8 +26,10 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.jpg)
 
-### You can use a free service to test with your github account: 
-https://kubesail.com/ Paste *Lets get started* page code details into *~/.kube/config* user file on your developer machine to access your remote cluster using kubectl *cli* command
+### You can use a free service to test
+Login with your github account on https://kubesail.com/ 
+Paste *Lets get started* page code details into *~/.kube/config* kubernetes installation user config file on your developer machine to access your remote cluster using kubectl *cli* command line
+
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubesail.jpg)
 
 ### View all nodes of the kubernetes cluster
@@ -51,7 +53,7 @@ NAME   READY   STATUS    RESTARTS   AGE
 kube   1/1     Running   0          11m
 ```
 
-### View log to trace 
+### View log to debug java application
 Visualizzare il log dell'applicazione, se in un pod sono presenti più contenitori dovremmo specificare il nome del pod ed il nome del contenitore:
 
 ```bat
@@ -90,8 +92,8 @@ kube                               1/1     Running   0          31m   app=art,en
 kube-deployment-8454999b96-m55rd   1/1     Running   0          11m   pod-template-hash=8454999b96,run=kube-deployment
 ```
 
-Una volta che il nostro servizio o pod è stato testato con successo, è magari stato individuato per essere
-invocato in produzione. Possiamo variarne l'etichetta o tag con il comando seguente:
+Una volta che il nostro servizio o pod è stato testato con successo, è magari stato scelto per essere
+invocato in ambiente di esercizio, possiamo variarne l'etichetta o tag con il seguente comando:
 
 ### Change label of a pod
 ```bat
@@ -99,8 +101,8 @@ kubectl label po kube env=prod --overwrite
 pod/kube labeled
 ```
 
-In ambiente di produzione abbiamo centinaia di container running o pod, per cui sarà molto utile filtrare
-per ottenere informazioni su un sottoinsieme di essi.
+In ambiente di produzione abbiamo centinaia di container running o pod, per si rivelerà molto utile filtrare
+per ottenere informazioni solo su un sottoinsieme di essi:
 
 ### Filter pod based on tag
 ```bat
@@ -121,7 +123,8 @@ kube-deployment-8454999b96-m55rd   1/1     Running   0          26m   pod-templa
 ```
 
 ### Possiamo escludere la visualizzazione di alcuni classi di pod sulla base dell'associazione con una etichetta o label
-Vogliamo identificare tutti i pod che non presentano associata un'etichetta denominata *autore*
+
+Vogliamo identificare tutti i pod che non presentano associata l'etichetta denominata *autore* 
 ```bat
 kubectl get po -l "!autore"
 
@@ -129,7 +132,8 @@ NAME                               READY   STATUS    RESTARTS   AGE
 kube-deployment-8454999b96-m55rd   1/1     Running   0          98m
 ```
 
-### Le label oltre ad essere associate ai pod possono essere associate anche ai *nodi*, un esempio:
+### Le label oltre ad essere associate ai pod possono essere associate anche ai *nodi*
+Un esempio di comando per etichettare un nodo della Google Kubernetes Engine (*gke*)
 ```
 kubectl label node gke-node-01-est-europe-45ed787ef env=test 
 ```
@@ -138,8 +142,9 @@ kubectl label node gke-node-01-est-europe-45ed787ef env=test
 ```bat
 kubectl get nodes -l env=test 
 ```
-E' utile etichettare anche i nodi perché attraverso questa è possibile associare i pod solo ad un determinato nodo. 
-Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modalità casuale in uno dei nodi a disposizione.
+E' utile etichettare anche i nodi perché attraverso la label è possibile associare i pod solo ad un determinato nodo. 
+
+Di deafult l'attivazione del pod è arbitraria, il pod viene collocato in modalità casuale in uno dei nodi a disposizione del cluster kubernetes.
 
 E' possibile specificare nel file *.yml* l'associazione di un pod con un determinato nodo attraverso l'elemento *node-selector*
 
@@ -166,13 +171,14 @@ spec:
           protocol: TCP
 ```
 
-### Visualizzare tutti i namespace (raccoglitori in grado di catalogare e ragguppare tutti i pod afferenti allo stesso tipo)
-
+### Visualizzare tutti i namespace (raccoglitori in grado di catalogare e ragguppare pod afferenti allo stesso tipo)
 E' possibile creare anche nuovi namespace in grado di raggruppare i nostri pod.
 
 ```bat
 kubectl get ns
+```
 
+```bat
 kubectl create -f namespace1.yml
 ```
 
@@ -182,7 +188,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: kube-webservice-namespace
-
 ```
 
 ### Eliminare un pod, eliminare tutti i pod eliminando il namespace
@@ -195,15 +200,15 @@ Soluzione drastica per eliminare tutti i pod, è eliminare il namespace con il c
 kubectl delete ns my-kube-webservice-namespace
 ```
 
-### Replication controller, il primo automatismo
-Una risorsa kubernetes che garantisce il continuo funzionamento di un determinato tipo o numero di pod. Monitora lo stato di un pod nel proprio dominio di responsabilità identificata dalla label (etichetta) che abbiamo associato al nostro pod. Gestisce il numero di repliche che vogliamo vengano attivate e lo manterrà costante aumentando o cancellando in maniera automatica i pod *running*.
+## Replication controller, il primo automatismo
+Un **rc** è una risorsa kubernetes che garantisce il continuo funzionamento di un determinato tipo o numero di pod. 
+Monitora lo stato di un pod nel proprio dominio di responsabilità identificata dalla label (*etichetta*) che abbiamo associato al nostro pod. Gestisce il numero di repliche che vogliamo vengano attivate e lo manterrà costante aumentando o cancellando in maniera automatica i pod *running*:
 
-- label selector, selezioniamo il dominio del replication controller
-- replica count, numero di istanze che vogliamo siano sempre attive
-- pod template
+ - label selector, selezioniamo il dominio del replication controller
+ - replica count, numero di istanze che vogliamo siano sempre attive
+ - pod template
 
 ### Creare un replication controller
-
 
 ```bat
 kubectl create -f replicationController1.yml
@@ -235,6 +240,7 @@ spec:
  ```
 
 Visualizziamo cosa è successo:
+
 ```bat
 kubectl get po --show-labels
 NAME                               READY   STATUS    RESTARTS   AGE     LABELS
@@ -242,8 +248,10 @@ repcon-articoli-z9d8s              1/1     Running   0          5m42s   app=arts
 repcon-articoli-z9aDs              1/1     Running   0          5m1s    app=artsrv
 repcon-articoli-ef34s              1/1     Running   0          6m19s   app=artsrv
 ```
+
 Sono stati creati ed attivati i tre POD ed etichettati con il riferimento (label) app=artsrv.
 Anche cambiando label con il seguente comando, il RC manterrà sempre attive almeno 3 repliche del POD.
+
 ```bat
 kubectl label pod repcon-articoli-z9d8s app=test --overwrite
 pod/repcon-articoli-z9d8s labeled
@@ -326,7 +334,7 @@ kube-deployment-8454999b96   1         1         1       2d23h
 repset-articoli              3         0         0       24s
 ```
 
-Un replica set permette di avere maggiore flessibilità rispetto al replication controller nella selezione di pod che verranno inclusi nel dominio di controllo del nostro replica set. 
+Un replica set permette di avere maggiore flessibilità(*vedi esempio*) rispetto al replication controller nella selezione di pod che verranno inclusi nel dominio di controllo del nostro replica set. 
 
 ```yaml
 --------------------------------> kubernetes/replicaSet2.yml file
@@ -370,7 +378,8 @@ kubectl scale rs repset-articoli --replicas=1
 
 ### Creare un nuovo Kubernetes Service
 
-Un servizio permette di raggiungere i nostri POD (ricordiamoci che gli IP possono cambiare, i pod possono essere ridondanti e sotto gestione delle repliche) e quindi i nostri contenitori (containers) per invocarne le funzionalità agendo come *gateway*:
+Un *Service* permette di raggiungere i nostri POD (ricordiamoci che gli IP possono cambiare, infatti un POD può essere rimosso e successivamente ricreato, i pod possono essere ridondanti, sotto gestione delle repliche, può essere variata la label associata rimuovendo il POD dalla giurisdizione del replication controller o replica set...). 
+Un service permette di invocarne le funzionalità agendo come *gateway*:
 
 Un service ha la funzione di agire come punto di collegamento tra il frontend ed il nostro backend oppure una qualsiasi componente che gestisce unicamente la persistenza dati.
 
@@ -386,7 +395,7 @@ metadata:
 spec:
   #sessionAffinity: ClientIP
   selector:
-    app: artsrv            ## Tutti i pod che hanno label etichetta app=artsrv rientreranno nel dominio del nostro service
+    app: artsrv            ## Tutti i pod che hanno label etichetta 'app=artsrv' rientreranno nel dominio del nostro service
   ports:
   - protocol: TCP
     port: 5051             ## Porta di ascolto del gateway (il service)
@@ -409,7 +418,6 @@ kubectl delete po --all
 ```
 
 ### Visualizzare tutte le variabili d'ambiente di un nodo
-
 ```bat
 kubectl exec repset-articoli-tjxq2 env
 
@@ -431,10 +439,12 @@ KUBERNETES_PORT=tcp://10.2.0.1:443
 HOME=/root
 ```
 ### Kube DNS
-Come funziona il DNS all'interno del kubernetes ? Vediamolo con un esempio: 
+Come funziona il DNS interno del kubernetes? 
+Esiste una componente DNS che permette di utilizzare il nome di un service per ottenere la traduzione verso gli IP dei pod che espongono la funzionalità.
+
+Vediamolo con un esempio: 
 
 ### Entriamo all'interno di un nostro contenitore POD
-
 ```bat
 kubectl exec -it repset-articoli-tjxq2 bash
 
@@ -460,14 +470,14 @@ Date: Mon, 27 Jan 2020 10:38:45 GMT
    {  ...
 ```
 
-L'url che abbiamo costruito: *http://10.2.46.183:5051/* ci permetterà di invocare indiscriminatamente uno dei vari containers che ha startato kubernetes. Stiamo utilizzando direttamente l'indirizzo IP tra il POD che contiene il node e il nostro container. Possiamo utilizzare le variabili d'ambiente che abbiamo letto in precedenza oppure direttamente il nome del nostro services *artsrv*:
+L'url *http://10.2.46.183:5051/* ci permetterà di invocare indiscriminatamente uno dei vari containers che ha startato kubernetes. Stiamo utilizzando direttamente l'indirizzo IP del service. 
+Possiamo utilizzare le variabili d'ambiente che abbiamo letto in precedenza oppure direttamente il nome del nostro services *artsrv*:
 
 ```
 curl -i -H "Accept: application/json" "http://artsrv.default.svc.cluster.local:5051/" 
 ```
 
-Possiamo visualizzare tutte le informazioni sul service:
-
+### Visualizziamo tutte le informazioni su un service:
 ```bat
 kubectl describe svc artsrv
 
@@ -485,17 +495,15 @@ Session Affinity:  None
 Events:            <none>
 ```
 
-## Un pod può contattare un servizio esterno per usufruire di una sua funzionalità (esempio di un weather-service):
+Un pod può anche contattare un servizio esterno per usufruire di una funzionalità esposta (esempio di integrazione di un weather-service):
 
 Creiamo il nostro servizio senza selettore ed associamogli le configurazioni endpoint:
-
 ```bat
 kubectl create -f service3.yml
 service/weather-service created
 ```
 
 e successivamente associamo gli endpoints come IP:
-
 ```bat
 kubectl create -f endpoints1.yml
 ```
@@ -513,13 +521,13 @@ metadata:
   name:  weather-service
 spec:
   type: ExternalName
-  externalName: api.openweathermap.org             # Non utilizzeranno gli IP ma direttamente un indirizzo mnemonico
+  externalName: api.openweathermap.org        # Non utilizziamo gli IP ma direttamente un indirizzo mnemonico
   ports:
   - port: 8080
 ```
 
-### Invocare un nostro pod da un client esterno.
-Anche in questo caso verrà configurato un service, un service di tipo *LoadBalancer*.
+### Invocare un nostro pod da un client esterno
+Anche in questo caso verrà configurato un service, però il service sarà di tipo *LoadBalancer*.
 
 ```yaml
 --------------------------------> service5.yml
@@ -540,14 +548,18 @@ spec:
 ```
 
 ### Introduzione agli ingress
-
 Configurare un service permette ad un client esterno di invocare i nostri servizi (POD) interni. 
 
-Ma kubernetes mette a disposizione un altro importante componente gli *ingress*, la soluzione per esporre la nostra webapp ed i suoi servizi offerti. 
+Ma kubernetes mette a disposizione un altro importante componente gli **ingress**, la soluzione per esporre la nostra webapp ed i suoi servizi offerti. 
 
-Creiamo un nuovo tipo di service da utilizzare per una webapp ed esporre un webservice: *NodePort*.
+Per fare ciò dobbiamo:
+- creare un nuovo tipo di service da utilizzare: *NodePort*
+- creare la ingress
 
 ### Creare un nuovo tipo di service NodePort
+```bat
+kubectl create -f nodePort1.yml
+```yaml
 
 ```yaml
 --------------------------------> nodePort1.yml
@@ -556,20 +568,17 @@ Creiamo un nuovo tipo di service da utilizzare per una webapp ed esporre un webs
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapp-nodeport
+  name: webapp-nodeport     # Il nome della NodePort
 spec:
-  type: NodePort          # NodePort specifica la tipologia di Service
+  type: NodePort            # type specifica la tipologia di Service
   ports:
-  - port: 80              # Esponiamo al client esterno la porta 80 per invocarci
-    targetPort: 8080      # La nostra applicazione è in ascolto sulla porta 8080
+  - port: 80                # Esponiamo al client esterno la porta 80 per invocarci
+    targetPort: 8080        # La nostra applicazione è in ascolto sulla porta 8080
   selector:
     app: webapp
-    
-    
 ```
 
 ### Creare una Ingress:
-
 ```bat
 kubectl create -f ingress.yml
 ```yaml
@@ -588,17 +597,15 @@ spec:
       paths:
       - path: /webapp/*
         backend:
-          serviceName: nodesrv-nodeport
+          serviceName: nodesrv-nodeport       # Il nome del service NodePort
           servicePort: 80
       - path: /*
         backend:
-          serviceName: webapp-nodeport
+          serviceName: webapp-nodeport        # Il nome del service NodePort
           servicePort: 80
-       
 ```
 
 Visualizziamo ora le Ingress configurate sul kluster:
-
 ```bat
 kubectl get ingresses
 
@@ -610,16 +617,38 @@ cm-acme-http-solver-sgjqp   soundapp.it   10.2.29.222   80, 443   88s
 Abbiamo creato una Ingress che ci permette di contattare il nostro cluster su due path:
  - www.soundapp.test.com:80/webapp/ 
  - www.soundapp.test.com:80/ 
-dove al primo risponderà un'applicazione Node Js ed al secondo un'applicazione Java Spring Boot. 
+dove al primo risponderà un'applicazione Node-Js ed al secondo un'applicazione Java-Spring-Boot. 
 La Ingress ci permette la massima flessibilità.
 
-## La persistenza dei dati
+## Visualizziamo i dettagli di una ingresses
+
+```bat
+kubectl describe ingresses alphashop
+
+Name:             alphashop
+Namespace:        antoniopaolacci
+Address:          10.2.29.222
+Default backend:  default-http-backend:80 (<none>)
+TLS:
+  alphashop-ingress terminates soundapp.it
+Rules:
+  Host         Path  Backends
+  ----         ----  --------
+  soundapp.it
+               /webapp/*   nodesrv-nodeport:80 (<none>)
+               /*          webapp-nodeport:80 (<none>)
+Annotations:
+  cert-manager.io/cluster-issuer:     kubesail-letsencrypt
+  certmanager.k8s.io/cluster-issuer:  kubesail-letsencrypt
+Events:                               <none>
+```
+
+### La persistenza dei dati
 
 Su Google Cloud Engine abbiamo prima la necessità di creare ad nuovo disco virtuale:
 *sudo gcloud compute disks create --size=1GiB --zone=europe-west4-a mysqldb*
 
 ### Creare un persistence volume
-
 ```yaml
 -----------------------------> persistentVolume1.yml
 apiVersion: v1
@@ -640,12 +669,12 @@ spec:
   ```    
 
 ### Visualizzare tutti i volumi:
-
 ```bat
 kubectl get pv
 ``` 
 
-Il nostro volume è a disposizione. Il suo spazio non è stato ancora reclamato da nessuno. Creiamo un *persistence volume claim*:
+Il nostro volume è a disposizione. 
+Il suo spazio non è stato ancora reclamato da nessuno. Creiamo un *persistence volume claim*:
 
 ```yaml
 -----------------------------> persistentVolumeClaim1.yml
@@ -664,16 +693,16 @@ spec:
   
 ```
 
-Stiamo acquisendo così 1GB di spazio e stiamo dicendo con il parametro *ReadWriteOnce* che un solo POD alla volta può accedere al volume in lettura e scrittura. 
+Stiamo acquisendo così 1GB di spazio e con il parametro *ReadWriteOnce* stiamo dicendo che un solo POD alla volta può accedere al volume in lettura e scrittura. 
 
 ### Visualizzare tutti i persistence volume claim:
-
 ```bat
 kubectl get pvc
 ``` 
 
 ### Creare il POD che ospita il DBMS MySql 
-...utilizzerà il persistence volume per memorizzare i data files del db
+
+Come esempio di utilizzo di una persistenza, creiamo un Mysql pod che utilizzerà il persistence volume per memorizzare i data files del db:
 
 ```yaml
 apiVersion: v1
@@ -726,14 +755,13 @@ parameters:
 ```
   
 ### Visualizzare tutte le storage class 
-
 ```bat
 kubectl get sc
 ```
+
 Esiste una storage class di base (standard) o default utilizzata quando non specifichiamo nulla e lasciamo stringa vuota nella costruzione di un  PersistentVolumeClaim
 
-### Modificare il POD del Mysql affinché utilizzi dischi SSD migliorando le prestazioni del DB
-
+### Modificare il POD del MySql affinché utilizzi dischi SSD migliorando le prestazioni del DB
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -748,7 +776,7 @@ spec:
     - ReadWriteOnce
 ```
 
-## Le variabili d'ambiente nei POD
+### Le variabili d'ambiente nei POD
 
 Vogliamo passare al file di configurazione di Spring Boot (+application.yml*) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
 
@@ -810,6 +838,10 @@ spec:
 ```
 
 ### Config Map
+Svincolare i pod dai dettagli di configurazione. Kubernetes permette di utilizzare una *Config Map*:
+
+- parametrizziamo il nostro *application.yml* di una generica Spring Boot application introducendo le variabili d'ambiente con l'uso di ${...}
+- creaimo il file ConfigMap *yml* per kubernetes 
 
 In quale modo è possibile configurare un **Config Map** per passare le configurazioni necessarie al nostro file Spring Boot *application.yml*, file di avvio della nostra applicazione o servizio.
 
