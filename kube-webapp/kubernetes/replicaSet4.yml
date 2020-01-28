@@ -1,0 +1,21 @@
+# ReplicaSet WebApp frontend
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: repset-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: antoniopaolacci/kube-webapp:0.0.1
+        ports:
+        - containerPort: 8080

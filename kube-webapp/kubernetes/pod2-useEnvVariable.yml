@@ -1,0 +1,29 @@
+# Pod  
+
+apiVersion: v1
+
+kind: Pod
+metadata:
+  name: kube-webapp-pod-v1
+  labels:
+    app: art
+    env: test
+
+spec:
+  containers:
+    - name: kube-webapp
+      image: antoniopaolacci/kube-webapp:0.0.1
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      env:
+        - name: MyServiceHost
+          value: "10.7.243.223"
+      ports:
+        - name: service
+          containerPort: 8080
+          protocol: TCP

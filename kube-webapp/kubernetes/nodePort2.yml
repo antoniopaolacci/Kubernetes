@@ -1,0 +1,13 @@
+# NodePort 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodesrv-nodeport
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: webapp

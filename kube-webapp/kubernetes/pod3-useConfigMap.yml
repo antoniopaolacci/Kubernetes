@@ -1,0 +1,51 @@
+# Pod  
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-webapp-pod-v2
+  labels:
+    app: art
+    env: test
+
+spec:
+  containers:
+    - name: kube-webapp
+      image: antoniopaolacci/kube-webapp:0.0.1
+#     resources:
+#       requests:
+#         memory: "256Mi"
+#         cpu: "250m"
+#       limits:
+#         memory: "512Mi"
+#         cpu: "500m"
+      env:
+        - name: MySqlHost
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: MySqlHost
+        - name: used
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_one
+        - name: cheaper
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_two
+        - name: powerful
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_three
+        - name: popular
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: data_four        
+      ports:
+        - name: service
+          containerPort: 8080
+          protocol: TCP

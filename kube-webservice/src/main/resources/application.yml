@@ -1,0 +1,18 @@
+
+spring:
+  profiles: 
+    active: dev
+  application:
+    name: kube-webservice 
+ 
+server:
+  port: 5051
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,httptrace,metrics,refresh,bus-refresh,hystrix.stream
+             
+
+

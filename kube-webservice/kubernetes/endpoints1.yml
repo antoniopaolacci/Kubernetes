@@ -1,0 +1,16 @@
+
+# Configurazione necessaria per il funzionamente di un service con solo nome e porta, senza selettore.
+
+# File di generazione degli Endpoints
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: weather-service    # Il nome deve essere uguale a quello dichiarato nella creazione 
+subsets:                   # del service senza selettore (nel nostro caso la stringa: 'weather-service')
+- addresses:
+  - ip: 146.185.181.89     
+  - ip: 95.85.63.65
+  - ip: 178.62.207.82
+  ports:
+  - port: 80               

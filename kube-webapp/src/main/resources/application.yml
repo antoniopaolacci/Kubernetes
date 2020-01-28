@@ -1,0 +1,27 @@
+
+spring:
+  profiles: 
+    active: dev
+  application:
+    name: kube-webapp 
+ 
+server:
+  port: 8080
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,httptrace,metrics,refresh,bus-refresh,hystrix.stream
+
+# ==============================================================
+# = My config
+# ==============================================================  
+service:
+  host: ${MyServiceHost}
+  
+database:
+  used: ${data_one}
+  cheaper: ${data_two}
+  powerful: ${data_three}
+  popular: ${data_four}

@@ -1,0 +1,21 @@
+
+## Pod (nodeSelector)
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-v2
+  labels:
+    app: art
+    env: test
+
+spec:
+  nodeSelector:
+    env: "test"
+  containers:
+    - name: articoli-webservice
+      image:  antoniopaolacci/kube-webservice:0.0.1
+      ports:
+        - name: service
+          containerPort: 5051
+          protocol: TCP

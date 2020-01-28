@@ -1,0 +1,19 @@
+
+## Pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube
+  labels:
+    app: art
+    env: test
+
+spec:
+  containers:
+    - name: articoli-webservice
+      image: antoniopaolacci/kube-webservice:0.0.1
+      ports:
+        - name: service
+          containerPort: 5051
+          protocol: TCP

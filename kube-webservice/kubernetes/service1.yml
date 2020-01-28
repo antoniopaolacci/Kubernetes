@@ -1,0 +1,14 @@
+# Kubernetes Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: artsrv
+spec:
+  #sessionAffinity: ClientIP
+  selector:
+    app: artsrv           ## Tutti i pod che hanno label etichetta app=artsrv rientreranno nel dominio del nostro service
+  ports:
+  - protocol: TCP
+    port: 5051            ## Porta di ascolto del gateway (il service)
+    targetPort: 5051      ## Porta dove verrà contattato il POD (containers)

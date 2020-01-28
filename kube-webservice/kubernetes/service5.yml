@@ -1,0 +1,13 @@
+# LoadBalancer Type Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: artsrv-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5051 
+    targetPort: 5051 
+  selector:
+    app: artsrv

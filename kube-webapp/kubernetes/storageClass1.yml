@@ -1,0 +1,9 @@
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: veloce
+provisioner: kubernetes.io/gce-pd    ## Dipende dal Kubernetes Cluster Provider
+parameters:
+  type: pd-ssd
+  zone: europe-west4-a               ## Zona Europa del Google Cloud Platform

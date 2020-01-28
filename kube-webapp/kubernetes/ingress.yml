@@ -1,0 +1,20 @@
+# Ingress 
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: alphashop
+spec:
+  rules:
+  - host: soundapp.it
+    http:
+      paths:
+      - path: /webapp/*
+        backend:
+          serviceName: nodesrv-nodeport
+          servicePort: 80
+      - path: /*
+        backend:
+          serviceName: webapp-nodeport
+          servicePort: 80
+       

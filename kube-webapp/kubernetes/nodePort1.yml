@@ -1,0 +1,13 @@
+# NodePort 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-nodeport
+spec:
+  type: NodePort        # NodePort specifica la tipologia di Service
+  ports:
+  - port: 80            # Esponiamo al client esterno la porta 80 per invocarci
+    targetPort: 8080    # La nostra applicazione è in ascolto sulla porta 8080
+  selector:
+    app: webapp

@@ -1,0 +1,21 @@
+
+## Replication Controller
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: repcon-articoli  ## Sovraintenderà ai POD di tipo articoli
+spec:
+  replicas: 3            ## Il numero di pod attivi sarà sempre uguali a 3
+  selector:
+    app: artsrv          ## Specifichiamo che l'app POD istanziati avranno l'identificativo 'artsrv'
+  template:
+    metadata:
+      labels:
+        app: artsrv      ## Il metadata del nostro POD avrà come riferimento la label app = 'artsrv' 
+    spec:
+      containers:        ## Specifichiamo il container che dovrà essere attivato
+      - name: articoli-webservice
+        image: antoniopaolacci/kube-webservice:0.0.1   ## Specifichiamo i campi <docker-hub-id>/<image-name>:<tag>
+        ports:
+        - containerPort: 5051

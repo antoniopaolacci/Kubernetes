@@ -1,0 +1,9 @@
+# Kubernetes Service 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service         ## Solo nome e porta, nessun selettore di POD
+spec:                           
+  ports:
+  - port: 8080

@@ -1,0 +1,16 @@
+
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: my-config 
+data:
+  # Configuration values can be set as key-value properties
+  data_one: mongodb
+  data_two: mariadb
+  data_three: oracle
+  data_four: cloudera
+  
+  # Or set as complete file contents (even JSON!)
+  keys: | 
+    image.public.key=771 
+    rsa.public.key=42

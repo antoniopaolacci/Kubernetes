@@ -1,0 +1,14 @@
+# Kubernetes Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodesrv
+spec:
+  #sessionAffinity: ClientIP
+  selector:
+    app: nodesrv
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

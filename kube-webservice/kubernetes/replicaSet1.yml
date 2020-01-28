@@ -1,0 +1,20 @@
+# ReplicaSet 
+apiVersion: apps/v1    # Differente tipologia, perché il replica set è gestito da differenti api del kubernetes
+kind: ReplicaSet
+metadata:
+  name: repset-articoli
+spec:                  # Numero delle specifiche
+  replicas: 3
+  selector:
+    matchLabels:
+        app: artsrv    # etichetta per selezione app=artsrv
+  template:
+    metadata:
+      labels:
+        app: artsrv    # creare i POD se essi non sono presenti e saranno generati con etichetta app=artsrv
+    spec:              # e caratteristiche seguenti (container, name, image)
+      containers:
+      - name: articoli-webservice
+        image: antoniopaolacci/kube-webservice:0.0.1
+        ports:
+        - containerPort: 5051
