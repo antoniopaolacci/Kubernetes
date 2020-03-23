@@ -779,7 +779,7 @@ spec:
 
 ### Le variabili d'ambiente nei POD
 
-Vogliamo passare al file di configurazione di Spring Boot (+application.yml*) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
+Vogliamo passare al file di configurazione di Spring Boot (*application.yml*) contenente ad esempio la variabile d'ambiente *${MyServiceHost}* un valore che verrà passato in fase di configurazione/creazione del POD.
 
 ```yaml
 spring:
