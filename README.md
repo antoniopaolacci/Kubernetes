@@ -13,6 +13,9 @@ Introduzione a Kubernetes
 - deployment: oggetto importante che scatena le seguenti operazioni sul cluster Kubernetes: creazione di oggetti di tipo *replicaset* che istanziano a loro volta i pod sulle varie macchine
 - persistent volume claim: il cluster Kubernetes crea il volume sul network filesystem del provider esterno e lo collega al pod
 
+### Master e worker:
+![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubernetes-cluster.jpeg)
+
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/pod.jpg)
 
 ### Nomenclatura:
