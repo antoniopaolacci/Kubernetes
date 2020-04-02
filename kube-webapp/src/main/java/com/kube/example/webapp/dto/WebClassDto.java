@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class WebDto {
+public class WebClassDto {
 	
     private long classId;
     private String teacherName;

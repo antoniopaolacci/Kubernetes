@@ -23,14 +23,14 @@
 	</appender>
 
 	<springProfile name="dev">
-		<root level="info">
+		<root level="debug">
 			<appender-ref ref="STDOUT" />
 			<appender-ref ref="FILE" />
 		</root>	
 	</springProfile>
 
 	<springProfile name="prod">
-		<root level="error">
+		<root level="infor">
 		    <appender-ref ref="STDOUT" />
 			<appender-ref ref="FILE" />
 		</root>

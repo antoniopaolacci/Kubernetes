@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kube.example.webapp.dto.WebDto;
+import com.kube.example.webapp.dto.WebClassDto;
 
 @RestController
 @RequestMapping("/")
@@ -23,6 +23,7 @@ public class WebController {
 	private static final Logger log = LoggerFactory.getLogger(WebController.class);
 	
 	private final RestTemplate restTemplate;
+	
 	private final String serviceHost;
 	
 	@Value("${database.used}")
@@ -53,11 +54,13 @@ public class WebController {
 	}
 
 	@GetMapping("/classes")
-	public ResponseEntity<List<WebDto>> listClasses() {
+	public ResponseEntity<List<WebClassDto>> listClasses() {
+		
 		return restTemplate.exchange("http://"+serviceHost+"/class", 
 									 HttpMethod.GET, 
 									 null, 
-									 new ParameterizedTypeReference<List<WebDto>>() {});
+									 new ParameterizedTypeReference<List<WebClassDto>>() {});
+		
 	}
 	
 }//end class

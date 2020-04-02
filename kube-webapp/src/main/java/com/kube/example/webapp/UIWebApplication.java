@@ -14,12 +14,10 @@ public class UIWebApplication implements WebMvcConfigurer {
 		SpringApplication.run(UIWebApplication.class, args);
 	}
 
-
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
-
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -28,7 +26,6 @@ public class UIWebApplication implements WebMvcConfigurer {
 			registry.addResourceHandler("/static/**")
 			.addResourceLocations("classpath:/static/", "classpath:/static/js/");
 		}
-
 	}
 
 }//end class
