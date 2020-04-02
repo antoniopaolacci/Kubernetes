@@ -30,11 +30,9 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.jpg)
 
-### You can use a free service to test
+### or you can use a free service to test
 Login with your github account on https://kubesail.com/ 
 Paste *Lets get started* page code details into *~/.kube/config* kubernetes installation user config file on your developer machine to access your remote cluster using kubectl *cli* command line
-
-![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubesail.jpg)
 
 ### View all nodes of the kubernetes cluster
 
