@@ -25,14 +25,17 @@ Introduzione a Kubernetes
  - Docker Hub, the public registry where to upload our images provided by docker (https://hub.docker.com/repository/docker/<docker-userId>)
  - Google Container Registry (GCR), Azure Container Registry (ACR), i registry di immagini rispettivamente forniti da Google e Microsoft
 
-### Installazione su Public Cloud Providers di *Kubernetes as a Service* 
+### Installazione su Public Cloud Providers di *Kubernetes as a Service* (managed Kubernetes service)
 ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-app.html
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.jpg)
 
-### or you can use a free service to test
+### or you can use a free online service to test
 Login with your github account on https://kubesail.com/ 
 Paste *Lets get started* page code details into *~/.kube/config* kubernetes installation user config file on your developer machine to access your remote cluster using kubectl *cli* command line
+
+### or single-node local cluster using kubeadm, minikube, Docker for Win/Mac
+Install kubernetes on raspberry pi (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
 
 ### View all nodes of the kubernetes cluster
 
