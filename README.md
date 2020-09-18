@@ -25,7 +25,7 @@ Introduzione a Kubernetes
  - Docker Hub, the public registry where to upload our images provided by docker (https://hub.docker.com/repository/docker/<docker-userId>)
  - Google Container Registry (GCR), Azure Container Registry (ACR), i registry di immagini rispettivamente forniti da Google e Microsoft
 
-### Installazione su Public Cloud Providers di *Kubernetes as a Service* (managed Kubernetes service)
+### Install on a Public Cloud Providers that provide *Kubernetes as a Service* (aka managed Kubernetes service)
 ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-app.html
 
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/providers.jpg)
@@ -34,24 +34,49 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 Login with your github account on https://kubesail.com/ 
 Paste *Lets get started* page code details into *~/.kube/config* kubernetes installation user config file on your developer machine to access your remote cluster using kubectl *cli* command line
 
-### or single-node local cluster using kubeadm, minikube, Docker for Win/Mac
-Install kubernetes on raspberry pi (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
+### or single-node local cluster using kubeadm, minikube, Docker Desktop for Win/Mac
+Install for example a cluster kubernetes on raspberry pi (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
+
+If you already have a cluster, and you can use kubectl to interact with the cluster, then you probably have a file named `config` in the `$HOME/.kube` directory.
+There might also be other configuration files in this directory. View configuration information _merged from all the files_ that are now listed in your `KUBECONFIG` environment variable, with command.
+
+###  View configuration information merged from all the files 
+```bat
+kubectl config view
+```
+
+### Display list of contexts 
+```bat
+kubectl config get-contexts
+```
+
+### Display the current-context
+```bat
+kubectl config current-context
+```
+
+### Set the default context to my-cluster-name
+```bat
+kubectl config use-context my-cluster-name           
+```
+
+### Change the context to us-west2-c
+```bat
+kubectl config use-context us-west2-c
+```
 
 ### View all nodes of the kubernetes cluster
-
 ```bat
 kubectl get nodes
 ```
 
 ### Create your first pod based on *yml* file
-
 ```bat
 kubectl create -f pod1.yml
 pod/kube created
 ```
 
 ### View all pods
-
 ```bat
 kubectl get pod
 NAME   READY   STATUS    RESTARTS   AGE
