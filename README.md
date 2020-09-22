@@ -60,9 +60,14 @@ kubectl config current-context
 kubectl config use-context my-cluster-name           
 ```
 
-### Change the context to us-west2-c
+### Change the context to another cluster
 ```bat
-kubectl config use-context us-west2-c
+kubectl config use-context <us-west2-c> or <docker-desktop> or <kubesail-antoniopaolacci>
+```
+
+### Display cluster info
+```bat
+kubectl cluster-info
 ```
 
 ### View all nodes of the kubernetes cluster
