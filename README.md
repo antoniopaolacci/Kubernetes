@@ -965,5 +965,8 @@ spec:
 ### kubectl cheat sheet
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
+### Kubenetes network elements
+https://www.ovh.com/blog/getting-external-traffic-into-kubernetes-clusterip-nodeport-loadbalancer-and-ingress/
+
 
 
