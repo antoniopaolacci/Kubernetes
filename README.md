@@ -34,11 +34,18 @@ ref.  https://blog.alterway.fr/en/kubernetes-101-launch-your-first-kubernetes-ap
 Login with your github account on https://kubesail.com/ 
 Paste *Lets get started* page code details into *~/.kube/config* kubernetes installation user config file on your developer machine to access your remote cluster using kubectl *cli* command line
 
-### or single-node local cluster using kubeadm, minikube, Docker Desktop for Win/Mac
-Install for example a cluster kubernetes on raspberry pi (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
+### or single-node local cluster using minikube, Docker Desktop for Win/Mac
+Install for example a cluster kubernetes on *raspberry pi* (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
 
-If you already have a cluster, and you can use kubectl to interact with the cluster, then you probably have a file named `config` in the `$HOME/.kube` directory.
+If you already have a cluster, and you can use *kubectl* to interact with the cluster, then you probably have a file named `config` in the `$HOME/.kube` directory.
 There might also be other configuration files in this directory. View configuration information _merged from all the files_ that are now listed in your `KUBECONFIG` environment variable, with command.
+
+### or install a Lightweight Kubernetes 
+
+ - for linux machine, where kubernetes doesn't run in a virtual machine, https://k3s.io/ ``` curl -sfL https://get.k3s.io | sh - ```
+ - for windows machine, kubernetes run in a VM, very slow, you can try https://kind.sigs.k8s.io/docs/user/quick-start/   Kind because it runs kubernetes single-node on a d docker deamon.
+
+Kind stands for - Kubernetes in a docker environment. (_Fake cluster, you can run your own test and stop when you are done!_)
 
 ###  View configuration information merged from all the files 
 ```bat
