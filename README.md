@@ -41,6 +41,12 @@ to list all contexts:
 ### or single-node local cluster using minikube, Docker Desktop for Win/Mac
 Install for example a cluster kubernetes on *raspberry pi* (https://medium.com/faun/single-node-kubernetes-on-a-raspberry-pi-cb93a4300305)
 
+Install on a cloud server (for example *Ubuntu 24 on Digital Ocean Droplet* ): 
+  - (https://medium.com/cypik/installing-minikube-on-ubuntu-22-04-lts-77f5abaf3d39)
+  - (https://ubuntushell.com/install-minikube/?utm_content=cmp-true)
+  - (https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
+  - (https://www.digitalocean.com/community/tutorials/how-to-use-minikube-for-local-kubernetes-development-and-testing)
+
 If you already have a cluster, and you can use **kubectl** to interact with the cluster, then you probably have a file named `config` in the `$HOME/.kube` directory.
 There might also be other configuration files in this directory. View configuration information _merged from all the files_ that are now listed in your `KUBECONFIG` environment variable, with command.
 
