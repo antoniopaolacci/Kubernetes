@@ -15,6 +15,18 @@ Introduzione a Kubernetes
 - replicaSet è l'evoluzione del replicationController permettendo di esprimere una selezione più flessibile del pod tramite il campo *matchExpressions*, ReplicaSet fornisce strategie di rolling update (deploy) più avanzate e supporta i rollback 
 - configMaps: sono oggetti in cui definire proprietà nel formato chiave/valore che possiamo usare all'interno dei container running, la sua rappresentazione è di coppie chiave-valore
 - secret: hanno uno scopo simile alle ConfigMap con la differenza che sono utilizzati nella gestione di dati sensibili, ad esempio le password, la sua rappresentazione è di coppie chiave-valore, ma i valori sono codificati in base64 e crittografati.
+  Attenzione a non fraintendere il funzionamento dei segreti: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore potrà tuttavia essere un qualsiasi file binario codificato in base64 che verrà mappato come contenuto del file. Esempio:
+  ```bat
+  cat keystore.jks| base64
+  
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: my-secret
+    namespace: my-namespace
+  data:
+    keystore.jks: "<base 64 from previous command here>"
+  ```
 - configMaps e secrets possono essere montati come volumi nei pod, consentendo alle applicazioni di accedere ai dati di configurazione o alle informazioni sensibili. Le modifiche a ConfigMaps e Secrets vengono automaticamente riflesse nei volumi montati, consentendo *aggiornamenti dinamici della configurazione senza riavviare i pod*.  Saranno resi disponibili al container come *variabili di ambiente* durante l’esecuzione dell’applicazione.
 - volumes: forniscono un modo per archiviare dati che possono essere utilizzati dai tuoi pod. La differenza principale tra i volumi e i file-system tradizionali è che i volumi sono *collegati ai pod* ciò significa che i dati possono persistere anche se il contenitore viene riavviato o utilizzato su un altro nodo. Esistono diverse tipologie: *emptyDir* un volume temporaneo creato quando il pod viene assegnato a un nodo e che esiste per tutta la durata del pod; *hostPath*: un volume che mappa un file o una directory specifici sulla macchina host, *persistentVolume*: un modo per fornire storage persistente che esiste oltre il ciclo di vita di un pod.
 - persistentVolume e persistentVolumeClaim: richiesta al cluster Kubernetes di creazione di un persistentVolume sul filesystem del provider esterno e lo collega al pod. Esempio: il pod Kubernetes che esegue un database relazione (PostgreSQL) è connesso a un volume persistente (/mnt/data/postgres). Ciò garantisce che  se il pod viene riavviato o riprogrammato, i dati del database persisteranno perché sono archiviati su un volume persistente.
