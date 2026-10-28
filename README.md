@@ -27,6 +27,27 @@ Introduzione a Kubernetes
   data:
     keystore.jks: "<base 64 from previous command here>"
   ```
+  Un utilizzo generico e frequente è come valori delle variabili d'ambiente che saranno disponibili poi in un container, vediamo la describe di un deployment a cui sono state settate le 'env' per recuperare database name,user,password:
+  ```txt
+  oc set env deploy/expense-service --from=secret/postgresql
+  oc describe deployment expense-service
+  Pod Template:
+    Labels:       deployment=expense-service
+    Annotations:  openshift.io/generated-by: OpenShiftNewApp
+    Containers:
+     expense-service:
+      Image:       registry.lab.example.com:8443/redhattraining/ocpdev-expense-service@sha256:6da61cd9f70101ad76c576ae2441701b4c107de4a2358a7ccf051f46ea4ddc68
+      Ports:       8080/TCP, 8443/TCP
+      Host Ports:  0/TCP, 0/TCP
+      Environment:
+        DATABASE_NAME:      <set to the key 'database-name' in secret 'postgresql'>      Optional: false
+        DATABASE_PASSWORD:  <set to the key 'database-password' in secret 'postgresql'>  Optional: false
+        DATABASE_USER:      <set to the key 'database-user' in secret 'postgresql'>      Optional: false
+      Mounts:               <none>
+    Volumes:                <none>
+    Node-Selectors:         <none>
+    Tolerations:            <none>
+  ``` 
 - configMaps e secrets possono essere montati come volumi nei pod, consentendo alle applicazioni di accedere ai dati di configurazione o alle informazioni sensibili. Le modifiche a ConfigMaps e Secrets vengono automaticamente riflesse nei volumi montati, consentendo *aggiornamenti dinamici della configurazione senza riavviare i pod*.  Saranno resi disponibili al container come *variabili di ambiente* durante l’esecuzione dell’applicazione.
 - volumes: forniscono un modo per archiviare dati che possono essere utilizzati dai tuoi pod. La differenza principale tra i volumi e i file-system tradizionali è che i volumi sono *collegati ai pod* ciò significa che i dati possono persistere anche se il contenitore viene riavviato o utilizzato su un altro nodo. Esistono diverse tipologie: *emptyDir* un volume temporaneo creato quando il pod viene assegnato a un nodo e che esiste per tutta la durata del pod; *hostPath*: un volume che mappa un file o una directory specifici sulla macchina host, *persistentVolume*: un modo per fornire storage persistente che esiste oltre il ciclo di vita di un pod.
 - persistentVolume e persistentVolumeClaim: richiesta al cluster Kubernetes di creazione di un persistentVolume sul filesystem del provider esterno e lo collega al pod. Esempio: il pod Kubernetes che esegue un database relazione (PostgreSQL) è connesso a un volume persistente (/mnt/data/postgres). Ciò garantisce che  se il pod viene riavviato o riprogrammato, i dati del database persisteranno perché sono archiviati su un volume persistente.
