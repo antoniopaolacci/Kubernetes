@@ -13,8 +13,8 @@ Introduzione a Kubernetes
 - deployment: oggetto importante che scatena le seguenti operazioni sul cluster Kubernetes: creazione di oggetti di tipo *replicaset* che istanziano a loro volta i pod sulle varie macchine oppure di oggetti di tipo *replicationController*
 - replicationController è uno dei più vecchi tipi di controllers in Kubernetes ed è responsabile di mantenere uno specifico numero di replica per un pod, utilizza il campo *label* per la selezione del pod e il campo *replicas* per le repliche
 - replicaSet è l'evoluzione del replicationController permettendo di esprimere una selezione più flessibile del pod tramite il campo *matchExpressions*, ReplicaSet fornisce strategie di rolling update (deploy) più avanzate e supporta i rollback 
-- configMaps: sono oggetti in cui definire proprietà nel formato chiave/valore che possiamo usare all'interno dei container running, la sua rappresentazione è di coppie chiave-valore
-- secret: hanno uno scopo simile alle ConfigMap con la differenza che sono utilizzati nella gestione di dati sensibili, ad esempio le password, la sua rappresentazione è di coppie chiave-valore, ma i valori sono codificati in base64 e crittografati.
+- configMaps: sono oggetti in cui definire proprietà nel formato chiave/valore che possiamo usare all'interno dei container running, la sua rappresentazione è di coppie chiave-valore. Attenzione a non fraintendere il funzionamento delle configMaps: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore  potrà essere un qualsiasi file binario che verrà mappato alla rispettiva chiave come contenuto del file. [Link to ConfigMap](#config-map)
+- secret: hanno uno scopo simile alle ConfigMap con la differenza che sono utilizzati nella gestione di dati sensibili, i valori come ad esempio le password sono **offuscati**, la sua rappresentazione è di coppie chiave-valore, ma i valori sono codificati in base64 e offuscati (no crittografia).
   Attenzione a non fraintendere il funzionamento dei segreti: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore potrà tuttavia essere un qualsiasi file binario codificato in base64 che verrà mappato come contenuto del file. Esempio:
   ```bat
   cat keystore.jks| base64
@@ -52,6 +52,24 @@ Introduzione a Kubernetes
 - volumes: forniscono un modo per archiviare dati che possono essere utilizzati dai tuoi pod. La differenza principale tra i volumi e i file-system tradizionali è che i volumi sono *collegati ai pod* ciò significa che i dati possono persistere anche se il contenitore viene riavviato o utilizzato su un altro nodo. Esistono diverse tipologie: *emptyDir* un volume temporaneo creato quando il pod viene assegnato a un nodo e che esiste per tutta la durata del pod; *hostPath*: un volume che mappa un file o una directory specifici sulla macchina host, *persistentVolume*: un modo per fornire storage persistente che esiste oltre il ciclo di vita di un pod.
 - persistentVolume e persistentVolumeClaim: richiesta al cluster Kubernetes di creazione di un persistentVolume sul filesystem del provider esterno e lo collega al pod. Esempio: il pod Kubernetes che esegue un database relazione (PostgreSQL) è connesso a un volume persistente (/mnt/data/postgres). Ciò garantisce che  se il pod viene riavviato o riprogrammato, i dati del database persisteranno perché sono archiviati su un volume persistente.
 - persistentVolumeClaim (o PVC): è una richiesta di storage da parte di un utente, simile a un Pod perché i Pod consumano risorse di nodo e i persistentVolumeClaim consumano risorse persistentVolume. I Pod possono richiedere livelli specifici di risorse (CPU e memoria). I Claim possono richiedere dimensioni (esempio: 50Mi come *request storage*) e modalità di accesso specifiche.
+
+Esempio di richiesta PVC a scopo didattico, in ambiente di produzione un DB distribuito 'mysql-db' sarà fornito da un operator openshift ad esempio che utilizzerà gli _StatefulSet_
+
+```
+Attach a persistent volume claim (PVC) called mysql-db-pvc to the deployment, mounted to the
+/var/lib/mysql path within the pod.
+
+oc set volumes deploy/mysql-db \
+--add --name nfs-volume-storage --type pvc \
+--claim-mode rwo --claim-size 1Gi --mount-path /var/lib/mysql \
+--claim-name mysql-db-pvc
+
+oc get pvc
+NAME           STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+mysql-db-pvc   Bound    pvc-53bcefb4-c189-4786-a3af-f4df08afa4ff   1Gi        RWO            nfs-storage    <unset>                 5m10s
+
+``` 
+
 
 ### Master e worker:
 ![image](https://github.com/antoniopaolacci/Kubernetes/blob/master/img/kubernetes-cluster.jpeg)
