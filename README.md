@@ -16,7 +16,7 @@ Introduzione a Kubernetes
 - replicaSet è l'evoluzione del replicationController permettendo di esprimere una selezione più flessibile del pod tramite il campo *matchExpressions*, ReplicaSet fornisce strategie di rolling update (deploy) più avanzate e supporta i rollback 
 - configMaps: sono oggetti in cui definire proprietà nel formato chiave/valore che possiamo usare all'interno dei container running, la sua rappresentazione è di coppie chiave-valore. Attenzione a non fraintendere il funzionamento delle configMaps: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore  potrà essere un qualsiasi file binario che verrà mappato alla rispettiva chiave come contenuto del file. [Link to ConfigMap](#config-map)
 - secret: hanno uno scopo simile alle ConfigMap con la differenza che sono utilizzati nella gestione di dati sensibili, i valori come ad esempio le password sono **offuscati**, la sua rappresentazione è di coppie chiave-valore, ma i valori sono codificati in base64 (offuscamento senza crittografia).
-  Attenzione a non fraintendere il funzionamento dei segreti: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore potrà tuttavia essere un qualsiasi file binario codificato in base64 che verrà mappato come contenuto del file. Esempio:
+  Attenzione a non fraintendere il funzionamento dei segreti: sono infatti coppie chiave-valore che puoi montare anche come *file*. Il valore potrà tuttavia essere un qualsiasi file binario codificato in base64 che verrà mappato come contenuto del file. Esempio di secret file:
   ```bat
   cat keystore.jks| base64
   
@@ -49,7 +49,7 @@ Introduzione a Kubernetes
     Node-Selectors:         <none>
     Tolerations:            <none>
   ``` 
-- configMaps e secrets possono essere montati come volumi nei pod, consentendo alle applicazioni di accedere ai dati di configurazione o alle informazioni sensibili. Le modifiche a ConfigMaps e Secrets vengono automaticamente riflesse nei volumi montati, consentendo *aggiornamenti dinamici della configurazione senza deployare una nuova versione dei pod*.  Saranno resi disponibili al container come *variabili di ambiente* durante l’esecuzione dell’applicazione.
+- configMaps e secrets possono essere montati come volumi nei pod, consentendo alle applicazioni di accedere ai dati di configurazione o alle informazioni sensibili. Le modifiche a ConfigMaps e Secrets vengono automaticamente riflesse nei volumi montati, consentendo *aggiornamenti dinamici della configurazione senza deployare una nuova versione dei pod*.  Saranno resi disponibili al container come *variabili di ambiente* durante l’esecuzione dell’applicazione o file disponibili in lettura.
 - volumes: forniscono un modo per archiviare dati che possono essere utilizzati dai tuoi pod. La differenza principale tra i volumi e i file-system tradizionali è che i volumi sono *collegati ai pod* ciò significa che i dati possono persistere anche se il contenitore viene riavviato o utilizzato su un altro nodo. Esistono diverse tipologie: *emptyDir* un volume temporaneo creato quando il pod viene assegnato a un nodo e che esiste per tutta la durata del pod; *hostPath*: un volume che mappa un file o una directory specifici sulla macchina host, *persistentVolume*: un modo per fornire storage persistente che esiste oltre il ciclo di vita di un pod. <br>
 NOTA: I Secret e le ConfigMap montati come volumi generano volumi effimeri ( _ephemeral volumes_ ). In Kubernetes e OpenShift, un volume si definisce "effimero" quando il suo ciclo di vita è strettamente legato a quello del Pod. Quando il Pod viene eliminato o termina, quel volume cessa di esistere e viene rimosso dal nodo.
 - persistentVolume e persistentVolumeClaim: richiesta al cluster Kubernetes di creazione di un persistentVolume sul filesystem del provider esterno e lo collega al pod. Esempio: il pod Kubernetes che esegue un database relazione (PostgreSQL) è connesso a un volume persistente (/mnt/data/postgres). Ciò garantisce che  se il pod viene riavviato o riprogrammato, i dati del database persisteranno perché sono archiviati su un volume persistente.
@@ -1046,6 +1046,308 @@ https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 ### Kubenetes network elements
 https://www.ovh.com/blog/getting-external-traffic-into-kubernetes-clusterip-nodeport-loadbalancer-and-ingress/
+
+### Openshift example of complex deployment
+
+```
+cat deployment.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: famousapp-mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: famousapp
+type: Opaque
+data:
+  mariadb-root-password: "SzRvVUJLbVo3Vw=="
+  mariadb-password: "cXVvdGVzcHdk"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: famousapp-mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/component: primary
+data:
+  my.cnf: |-
+    [mysqld]
+    skip-name-resolve
+    explicit_defaults_for_timestamp
+    basedir=/opt/redhattraining/mariadb
+    plugin_dir=/opt/redhattraining/mariadb/plugin
+    port=3306
+    socket=/opt/redhattraining/mariadb/tmp/mysql.sock
+    tmpdir=/opt/redhattraining/mariadb/tmp
+    max_allowed_packet=16M
+    bind-address=0.0.0.0
+    pid-file=/opt/redhattraining/mariadb/tmp/mysqld.pid
+    log-error=/opt/redhattraining/mariadb/logs/mysqld.log
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+    
+    [client]
+    port=3306
+    socket=/opt/redhattraining/mariadb/tmp/mysql.sock
+    default-character-set=UTF8
+    plugin_dir=/opt/redhattraining/mariadb/plugin
+    
+    [manager]
+    port=3306
+    socket=/opt/redhattraining/mariadb/tmp/mysql.sock
+    pid-file=/opt/redhattraining/mariadb/tmp/mysqld.pid
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: famousapp-mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: mysql
+      nodePort: null
+  selector: 
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/component: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: famousapp-famouschart
+  labels:
+    app.kubernetes.io/name: famouschart
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/version: "1.16.0"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: famouschart
+    app.kubernetes.io/instance: famousapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: famousapp-famouschart
+  labels:
+    app.kubernetes.io/name: famouschart
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/version: "1.16.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: famouschart
+      app.kubernetes.io/instance: famousapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: famouschart
+        app.kubernetes.io/instance: famousapp
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: famouschart
+          securityContext:
+            {}
+          image: "registry.lab.example.com:8443/redhattraining/famous-quotes:2.1"
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: QUOTES_HOSTNAME
+            value: famousapp-mariadb
+          - name: QUOTES_DATABASE
+            value: quotesdb
+          - name: QUOTES_USER
+            value: quotes
+          - name: QUOTES_PASSWORD
+            value: quotespwd
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: famousapp-mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/component: primary
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app.kubernetes.io/name: mariadb
+      app.kubernetes.io/instance: famousapp
+      app.kubernetes.io/component: primary
+  serviceName: famousapp-mariadb
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/configuration: 68ea57c9ab60373f05868ead8353923ea87bccb131675954c21b519bc410209e
+      labels:
+        app.kubernetes.io/name: mariadb
+        app.kubernetes.io/instance: famousapp
+        app.kubernetes.io/component: primary
+    spec:
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: mariadb
+                    app.kubernetes.io/instance: famousapp
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      containers:
+        - name: mariadb
+          image: registry.lab.example.com:8443/redhattraining/mariadb:10.5.10-debian-10-r0
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: famousapp-mariadb
+                  key: mariadb-root-password
+            - name: MARIADB_USER
+              value: "quotes"
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: famousapp-mariadb
+                  key: mariadb-password
+            - name: MARIADB_DATABASE
+              value: "quotesdb"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          resources: 
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /redhattraining/mariadb
+            - name: config
+              mountPath: /opt/redhattraining/mariadb/conf/my.cnf
+              subPath: my.cnf
+      volumes:
+        - name: config
+          configMap:
+            name: famousapp-mariadb
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels: 
+          app.kubernetes.io/name: mariadb
+          app.kubernetes.io/instance: famousapp
+          app.kubernetes.io/component: primary
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app.kubernetes.io/instance: famousapp
+    app.kubernetes.io/name: famouschart
+    app.kubernetes.io/version: 1.16.0
+  name: famousapp-famouschart
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: famousapp-famouschart
+    weight: 100
+  wildcardPolicy: None
+```
+
+Vengono creati i seguenti oggetti Kubernetes/Openshift:
+
+```
+oc apply -f deployment.yaml
+configmap/famousapp-mariadb created
+secret/famousapp-mariadb created
+service/famousapp-famouschart created
+service/famousapp-mariadb created
+deployment.apps/famousapp-famouschart created
+statefulset.apps/famousapp-mariadb created
+route.route.openshift.io/famousapp-famouschart created
+```
 
 
 
